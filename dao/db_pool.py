@@ -1,0 +1,28 @@
+""" 
+Description: 
+ - AiReport project.
+
+History:
+ - 2024/07/11 by Hysun (hysun.he@oracle.com): Created
+"""
+
+import oracledb
+from conf import app_config
+
+vectordb_pool = oracledb.create_pool(
+    user=app_config.DB_USER,
+    password=app_config.DB_PWD,
+    dsn=f"{app_config.DB_HOST}:{app_config.DB_PORT}/{app_config.DB_SERVICE}",
+    min=app_config.DB_POOL_MIN,
+    max=app_config.DB_POOL_MAX,
+)
+
+selectai_pool = oracledb.create_pool(
+    user=app_config.SELECTAI_DB_USER,
+    password=app_config.SELECTAI_DB_PWD,
+    dsn=app_config.SELECTAI_DSN,
+    wallet_location=app_config.SELECTAI_WALLET,
+    wallet_password=app_config.SELECTAI_WALLET_PASSWORD,
+    config_dir=app_config.SELECTAI_WALLET,
+)
+ 
