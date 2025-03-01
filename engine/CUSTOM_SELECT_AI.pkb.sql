@@ -430,7 +430,6 @@ create or replace package body CUSTOM_SELECT_AI is
         end if;
 
         if p_request_id is not null then
-            -- TODO: Do this asynchronously
             insert into CUSTOM_SELECT_AI_EMBEDDINGS(
                 user_name,
                 request_id,
@@ -462,6 +461,7 @@ create or replace package body CUSTOM_SELECT_AI is
     function RUNSQL (
         p_text              IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
+        p_max_rows          IN NUMBER default 20,
         p_user              IN VARCHAR2 default null,
         p_request_id        IN VARCHAR2 default null,
         p_wallet_path       IN VARCHAR2 default null,
@@ -490,7 +490,7 @@ create or replace package body CUSTOM_SELECT_AI is
         );
 
         IF INSTR(lower(l_sql),'fetch ') = 0 THEN 
-            l_sql := l_sql ||' FETCH FIRST 20 ROWS ONLY';
+            l_sql := l_sql ||' FETCH FIRST ' || p_max_rows || ' ROWS ONLY';
         END IF;
 
         OPEN v_result FOR l_sql;
