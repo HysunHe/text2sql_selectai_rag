@@ -175,7 +175,7 @@ def search_data(user: str, ask: str):
     (chart, data_cols, name_cols, ext_rpt_url) = dao_sql.get_chart_by_intent(intent)
 
     if not selectai_prompt:
-        chat_response = selectai_util.free_chat(ask, app_config.SELECTAI_PROFILE)
+        chat_response = selectai_util.free_chat(user, ask, app_config.SELECTAI_PROFILE)
         return [{"content": chat_response, "source": "selectai", "score": 1}]
 
     param_array = None if not params else json.loads(params)
@@ -235,8 +235,9 @@ def search_data(user: str, ask: str):
         _logger.debug(f"### Cache hit(GOOD): {selectai_prompt_sentence}")
         return result_cache.get_entry(f"{user}_{selectai_prompt_sentence}")
 
+    request_id = uuid.uuid4().hex
     (query_json, query_rows, col_headers) = selectai_util.runsql(
-        user, selectai_prompt_sentence, app_config.SELECTAI_PROFILE
+        user, selectai_prompt_sentence, app_config.SELECTAI_PROFILE, request_id
     )
 
     search_result_object = (
