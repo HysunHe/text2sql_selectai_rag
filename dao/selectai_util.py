@@ -94,6 +94,54 @@ def runsql(
         return query(user, sql)
 
 
+def runsql_direct(
+    user: Optional[str],
+    sentence: str,
+    llm_profile: str,
+    request_id: Optional[str] = None,
+) -> tuple[Optional[List[any]], Optional[List[any]], Optional[List[str]]]:
+    _logger.debug(f"Running runsql_direct ...[{llm_profile}]")
+    sql = f"""
+        SELECT CUSTOM_SELECT_AI.SHOWSQL(
+            p_app_user      => '{user}',
+            p_profile_name  => '{llm_profile}',
+            p_text          => '{sentence}',
+            p_request_id    => '{request_id}'
+        ) FROM dual
+    """
+
+    result_array = []
+    with selectai_pool.acquire() as connection:
+        with connection.cursor() as cursor:
+            try:
+                set_vpd_appuser(cursor, user)
+                cursor.execute(sql)
+                cols = cursor.description
+                _logger.debug(f"# cols: {cols}")
+                if cols is None:
+                    return (["NO_DATA_FOUND"], [], [])
+                else:
+                    header_data = [cols[c][0] for c in range(len(cols))]
+                    _logger.debug(f"# header_data: {header_data}")
+                    data = cursor.fetchall()
+                    raw_data = data
+                    for row in data:
+                        _logger.debug(f"*** Row: {row} with cols {cols}")
+                        row_json = dict()
+                        result_array.append(row_json)
+                        for c in range(len(row)):
+                            row_json[cols[c][0]] = row[c]
+            except DatabaseError as e:
+                _logger.debug(str(e))
+                return (None, None, None)
+
+    _logger.debug(f"### Result JSON(query): {result_array}")
+    if not result_array:
+        return (["NO_DATA_FOUND"], [], [])
+
+    return (result_array, raw_data, header_data)
+
+
 def chat(
     user: Optional[str], sentence: str, llm_profile: str, debug: Optional[bool] = True
 ) -> str:
