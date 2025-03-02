@@ -285,10 +285,11 @@ create or replace package body CUSTOM_SELECT_AI is
         "messages": <CONTENT>   
     }';
 
-        V_PROMPT := REPLACE(REPLACE(p_prompt,CHR(13),'\n'),CHR(10),'\n');
-        V_PROMPT := REPLACE(V_PROMPT,'\"','-^@^-');
-        V_PROMPT := REPLACE(V_PROMPT,'"','\"');
-        V_PROMPT := REPLACE(V_PROMPT,'-^@^-','\\\"');
+        V_PROMPT := p_prompt;
+        -- V_PROMPT := REPLACE(REPLACE(p_prompt,CHR(13),'\n'),CHR(10),'\n');
+        -- V_PROMPT := REPLACE(V_PROMPT,'\"','-^@^-');
+        -- V_PROMPT := REPLACE(V_PROMPT,'"','\"');
+        -- V_PROMPT := REPLACE(V_PROMPT,'-^@^-','\\\"');
 
         l_request_body := REPLACE(l_request_body,'<CONTENT>',V_PROMPT);
         l_request_body := REPLACE(l_request_body,'<MODEL>',V_MODEL);
@@ -356,11 +357,19 @@ create or replace package body CUSTOM_SELECT_AI is
         p_no_proxy_domains  IN VARCHAR2 default null
     ) return varchar2 is
         l_prompt            VARCHAR2(4000);
+        l_user_prompt       VARCHAR2(4000);
+        l_system_prompt     VARCHAR2(4000);
     begin
+        l_user_prompt := REPLACE(REPLACE(p_user_text,CHR(13),'\n'),CHR(10),'\n');
+        l_user_prompt := REPLACE(l_user_prompt,'"','\"');
+
         if p_system_text is not null then
+            l_system_prompt := REPLACE(REPLACE(p_system_text,CHR(13),'\n'),CHR(10),'\n');
+            l_system_prompt := REPLACE(l_system_prompt,'"','\"');
+
             l_prompt := '[
             {"role": "system","content": "' || p_system_text || '"},
-            {"role": "user","content": "' || p_user_text || '"}
+            {"role": "user","content": "' || l_user_prompt || '"}
             ]';
         else
             l_prompt := '[
