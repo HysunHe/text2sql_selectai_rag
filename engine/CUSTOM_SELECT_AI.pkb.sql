@@ -449,7 +449,7 @@ create or replace package body CUSTOM_SELECT_AI is
     end SHOWSQL;
 
 
-    function RUNSQL (
+    PROCEDURE RUNSQL (
         p_text              IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
         p_max_rows          IN NUMBER default 20,
@@ -459,7 +459,7 @@ create or replace package body CUSTOM_SELECT_AI is
         p_wallet_pwd        IN VARCHAR2 default null,
         p_proxy             IN VARCHAR2 default null,
         p_no_proxy_domains  IN VARCHAR2 default null
-    ) RETURN SYS_REFCURSOR is
+    ) is
         l_sql               VARCHAR2(4000);
         v_result            SYS_REFCURSOR;
     begin
@@ -479,7 +479,7 @@ create or replace package body CUSTOM_SELECT_AI is
         END IF;
 
         OPEN v_result FOR l_sql;
-        RETURN v_result;
+        DBMS_SQL.RETURN_RESULT(cur);
     end RUNSQL;
 
 end CUSTOM_SELECT_AI;

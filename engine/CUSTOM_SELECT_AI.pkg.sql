@@ -67,7 +67,7 @@ create or replace package CUSTOM_SELECT_AI is
         p_no_proxy_domains  IN VARCHAR2 default null
     ) return varchar2;
 
-    function RUNSQL (
+    PROCEDURE RUNSQL (
         p_text              IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
         p_max_rows          IN NUMBER default 20,
@@ -77,7 +77,7 @@ create or replace package CUSTOM_SELECT_AI is
         p_wallet_pwd        IN VARCHAR2 default null,
         p_proxy             IN VARCHAR2 default null,
         p_no_proxy_domains  IN VARCHAR2 default null
-    ) return SYS_REFCURSOR;
+    );
 
 end CUSTOM_SELECT_AI;
 /
