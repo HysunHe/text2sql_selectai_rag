@@ -195,8 +195,8 @@ create or replace package body CUSTOM_SELECT_AI is
         l_prompt varchar(32767);
         l_table_prompt varchar2(32767);
         l_table_info varchar2(32767);
-        -- l_j json_array_t ;
     begin
+        DBMS_OUTPUT.PUT_LINE('--- showprompt ---');
         SELECT OBJECT_LIST INTO l_object_list
         from CUSTOM_SELECT_AI_PROFILES
         where UPPER(PROFILE_NAME)=UPPER(p_profile_name);
@@ -221,6 +221,8 @@ create or replace package body CUSTOM_SELECT_AI is
         l_object := TREAT (l_object_elem AS JSON_OBJECT_T);
         l_owner := NVL(l_object.get_string('owner'),l_object.get_string('OWNER'));
         l_table_name := NVL(l_object.get_string('name'),l_object.get_string('NAME'));
+
+        DBMS_OUTPUT.PUT_LINE('Processing object ' || l_owner || '.' || l_table_name);
         begin
             l_table_info := DESC_TABLE(l_owner,l_table_name);
         l_table_info := REPLACE(l_table_info, '"', '\"');
@@ -253,7 +255,6 @@ create or replace package body CUSTOM_SELECT_AI is
         ]
     }
     ]';
-        -- return json_array_t(l_prompt).to_string;
         return l_prompt;
     end SHOWPROMPT;
 
@@ -359,10 +360,8 @@ create or replace package body CUSTOM_SELECT_AI is
     exception
         when UTL_HTTP.TOO_MANY_REQUESTS then
             return 'HTTP 429 Too Many Requests';
-        when UTL_HTTP.REQUEST_FAILED then
-            return 'HTTP request failed';
-        when others then
-            return 'An error occurred: ' || SQLERRM;
+        when OTHERS then
+            return 'HTTP Request Failed: ' || SUBSTR(DBMS_UTILITY.format_error_stack, 1, 500);
     end MAKE_LLM_REQUEST;
 
 
@@ -403,7 +402,6 @@ create or replace package body CUSTOM_SELECT_AI is
         l_prompt            VARCHAR2(32767);
         l_sql               VARCHAR2(32767);
         l_valid             VARCHAR2(32767);
-        LlmCapabilityLimitException EXCEPTION;
         PRAGMA AUTONOMOUS_TRANSACTION;
     begin
         l_prompt := SHOWPROMPT(
@@ -426,7 +424,8 @@ create or replace package body CUSTOM_SELECT_AI is
         l_valid := VALIDSQL(l_sql);
 
         if l_valid <> 'OK' then
-            raise LlmCapabilityLimitException;
+            DBMS_OUTPUT.put_line('LlmCapabilityLimitException: ' || l_valid);
+            return 'LlmCapabilityLimitException: Failure to generate SQL! ' || l_valid;
         end if;
 
         if p_request_id is not null then

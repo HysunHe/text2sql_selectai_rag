@@ -1,3 +1,5 @@
+set serveroutput on;
+
 EXEC CUSTOM_SELECT_AI.DROP_PROVIDER('qwen');
 
 BEGIN
@@ -16,23 +18,8 @@ BEGIN
       p_attributes      => '{
           "provider": "qwen",
           "model" : "qwen-max-2025-01-25",
-          "object_list": [{"owner": "OUSER", "name": "HKE_PROD_DEFECT"},
-                          {"owner": "OUSER", "name": "HKE_PROD_OUT_YEILD_QTY"}
-                          ]
-      }'
-    );
-END;
-/
-
-BEGIN
-	CUSTOM_SELECT_AI.CREATE_PROFILE(
-      p_profile_name    =>'hke_profile',
-      p_description     => 'SelectAI DEMO for HKE',
-      p_attributes      => '{
-          "provider": "qwen",
-          "model" : "qwen-max-2025-01-25",
-          "object_list": [{"owner": "OUSER", "name": "HKE_PROD_DEFECT"},
-                          {"owner": "OUSER", "name": "HKE_PROD_OUT_YEILD_QTY"}
+          "object_list": [{"owner": "POCUSER", "name": "HKE_PROD_DEFECT"},
+                          {"owner": "POCUSER", "name": "HKE_PROD_OUT_YEILD_QTY"}
                           ]
       }'
     );
@@ -63,3 +50,14 @@ SELECT dbms_vector.utl_to_embedding(
         "model": "cohere.embed-multilingual-v3.0"
     }')
 );
+
+select * FROM user_credentials;
+
+BEGIN
+    DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
+        host => '*',
+        ace => xs$ace_type(privilege_list => xs$name_list('connect'),
+                           principal_name => 'POCUSER',
+                           principal_type => xs_acl.ptype_db));
+END;
+/
