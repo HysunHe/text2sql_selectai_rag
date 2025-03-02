@@ -17,12 +17,4 @@ vectordb_pool = oracledb.create_pool(
     max=app_config.DB_POOL_MAX,
 )
 
-selectai_pool = oracledb.create_pool(
-    user=app_config.SELECTAI_DB_USER,
-    password=app_config.SELECTAI_DB_PWD,
-    dsn=app_config.SELECTAI_DSN,
-    wallet_location=app_config.SELECTAI_WALLET,
-    wallet_password=app_config.SELECTAI_WALLET_PASSWORD,
-    config_dir=app_config.SELECTAI_WALLET,
-)
- 
+selectai_pool = vectordb_pool

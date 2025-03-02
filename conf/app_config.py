@@ -27,15 +27,6 @@ NEAREST_TOPN = int(os.environ.get("NEAREST_TOPN", 10))
 DISTANCE_THRESHOLD = float(os.environ.get("DISTANCE_THRESHOLD", 0.25))
 DISTANCE_THRESHOLD_ACCURATE = float(os.environ.get("DISTANCE_THRESHOLD_ACCURATE", 0.05))
 
-# SelectAI database connections.
-SELECTAI_DB_USER = os.environ.get("SELECTAI_DB_USER")
-SELECTAI_DB_PWD = os.environ.get("SELECTAI_DB_PWD")
-SELECTAI_DSN = os.environ.get("SELECTAI_DSN")
-SELECTAI_WALLET = os.environ.get("SELECTAI_WALLET")
-SELECTAI_WALLET_PASSWORD = os.environ.get("SELECTAI_WALLET_PASSWORD")
-SELECTAI_DB_POOL_MIN = int(os.environ.get("SELECTAI_DB_POOL_MIN", 1))
-SELECTAI_DB_POOL_MAX = int(os.environ.get("SELECTAI_DB_POOL_MAX", 2))
-
 # SelectAI parameters
 SELECTAI_PROFILE = os.environ.get("SELECTAI_PROFILE")
 
@@ -60,7 +51,3 @@ LOG_FILE_PATH = os.environ.get("LOG_FILE_PATH")
 
 # Embedding model
 EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL")
-
-# RAG settings
-RAG_DOC_PATH = os.environ.get("RAG_DOC_PATH")
-RAG_DOC_VIEWER = os.environ.get("RAG_DOC_VIEWER")
