@@ -482,7 +482,7 @@ create or replace package body CUSTOM_SELECT_AI is
         END IF;
 
         OPEN v_result FOR l_sql;
-        DBMS_SQL.RETURN_RESULT(cur);
+        DBMS_SQL.RETURN_RESULT(v_result);
     end RUNSQL;
 
 end CUSTOM_SELECT_AI;
