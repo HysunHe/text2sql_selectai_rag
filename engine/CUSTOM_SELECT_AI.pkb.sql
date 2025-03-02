@@ -368,12 +368,12 @@ create or replace package body CUSTOM_SELECT_AI is
             l_system_prompt := REPLACE(l_system_prompt,'"','\"');
 
             l_prompt := '[
-            {"role": "system","content": "' || p_system_text || '"},
+            {"role": "system","content": "' || l_system_prompt || '"},
             {"role": "user","content": "' || l_user_prompt || '"}
             ]';
         else
             l_prompt := '[
-            {"role": "user","content": "' || p_user_text || '"}
+            {"role": "user","content": "' || l_user_prompt || '"}
             ]';
         end if;
 

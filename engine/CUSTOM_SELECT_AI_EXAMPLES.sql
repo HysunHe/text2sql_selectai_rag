@@ -61,3 +61,16 @@ BEGIN
                            principal_type => xs_acl.ptype_db));
 END;
 /
+
+
+set serveroutput on;
+declare
+ l_user_prompt       VARCHAR2(4000);
+  p_user_text varchar2(1000) := '## <用户问题>:
+                你好';
+begin
+        l_user_prompt := REPLACE(REPLACE(p_user_text,CHR(13),'\n'),CHR(10),'\n');
+        l_user_prompt := REPLACE(l_user_prompt,'"','\"');
+    dbms_output.put_line(l_user_prompt);
+end;
+/

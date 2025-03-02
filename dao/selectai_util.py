@@ -89,6 +89,7 @@ def runsql(
     request_id: Optional[str] = None,
 ) -> tuple[Optional[List[any]], Optional[List[any]], Optional[List[str]]]:
     sql = showsql(user, sentence, llm_profile, request_id)
+    _logger.debug(sql)
     if sql is None:
         return (None, None, None)
     else:
@@ -102,7 +103,7 @@ def chat(
     system_prompt: Optional[str] = None,
     debug: Optional[bool] = True,
 ) -> str:
-    _logger.debug(f"Running chat ...[{sentence}]")
+    _logger.debug(f"Running chat ...[{llm_profile}]")
     del user
 
     if system_prompt:
@@ -125,7 +126,6 @@ def chat(
     with selectai_pool.acquire() as connection:
         with connection.cursor() as cursor:
             for result in cursor.execute(sql):
-                _logger.debug(result)
                 rows.append(result[0])
 
     if debug:
