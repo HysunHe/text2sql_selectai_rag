@@ -69,6 +69,7 @@ create or replace package CUSTOM_SELECT_AI is
     function RUNSQL (
         p_text              IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
+        p_max_rows          IN NUMBER default 20,
         p_user              IN VARCHAR2 default null,
         p_request_id        IN VARCHAR2 default null,
         p_wallet_path       IN VARCHAR2 default null,
