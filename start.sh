@@ -1,4 +1,4 @@
-cd /home/ubuntu/Hysun/aireport
+cd /home/ubuntu/Hysun/selectai_rag
 . app.env
 
 kill -9 `lsof -i:8080 | awk '{print $2}' | grep -v "PID"` > /dev/null 2>&1
