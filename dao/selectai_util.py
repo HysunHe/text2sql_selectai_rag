@@ -25,7 +25,7 @@ def showsql(
     _logger.debug(f"Running showsql ...[{llm_profile}]")
     sql = f"""
         SELECT CUSTOM_SELECT_AI.SHOWSQL(
-            p_app_user      => '{user}',
+            p_user      => '{user}',
             p_profile_name  => '{llm_profile}',
             p_text          => '{sentence}',
             p_request_id    => '{request_id}'
@@ -103,7 +103,7 @@ def runsql(
     _logger.debug(f"Running runsql_direct ...[{llm_profile}]")
     sql = f"""
         SELECT CUSTOM_SELECT_AI.RUNSQL(
-            p_app_user      => '{user}',
+            p_user      => '{user}',
             p_profile_name  => '{llm_profile}',
             p_text          => '{sentence}',
             p_request_id    => '{request_id}'
@@ -148,7 +148,7 @@ def chat(
     _logger.debug(f"Running chat ...[{llm_profile}]")
     sql = f"""
         SELECT CUSTOM_SELECT_AI.CHAT(
-            p_app_user      => '{user}',
+            p_user      => '{user}',
             p_profile_name  => '{llm_profile}',
             p_text          => '{sentence}'
         ) FROM dual
