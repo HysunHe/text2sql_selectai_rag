@@ -285,12 +285,7 @@ create or replace package body CUSTOM_SELECT_AI is
         "messages": <CONTENT>   
     }';
 
-        V_PROMPT := p_prompt;
-        -- V_PROMPT := REPLACE(REPLACE(p_prompt,CHR(13),'\n'),CHR(10),'\n');
-        -- V_PROMPT := REPLACE(V_PROMPT,'\"','-^@^-');
-        -- V_PROMPT := REPLACE(V_PROMPT,'"','\"');
-        -- V_PROMPT := REPLACE(V_PROMPT,'-^@^-','\\\"');
-
+        V_PROMPT := REPLACE(p_prompt, '''', '''''');
         l_request_body := REPLACE(l_request_body,'<CONTENT>',V_PROMPT);
         l_request_body := REPLACE(l_request_body,'<MODEL>',V_MODEL);
         l_request_body := REPLACE(l_request_body,'<TEMPERATURE>',TO_CHAR(p_temperature, '999990D99'));
@@ -321,7 +316,7 @@ create or replace package body CUSTOM_SELECT_AI is
         L_HTTP_RESPONSE := UTL_HTTP.GET_RESPONSE(L_HTTP_REQUEST);
         UTL_HTTP.READ_TEXT(L_HTTP_RESPONSE, L_RESPONSE_BODY);
         UTL_HTTP.END_RESPONSE(L_HTTP_RESPONSE);
-        -- L_RESPONSE_BODY := REPLACE(L_RESPONSE_BODY, '''', '''''');
+        L_RESPONSE_BODY := REPLACE(L_RESPONSE_BODY, '''', '''''');
 
         DBMS_OUTPUT.put_line('Response: ' || l_response_body);
 
