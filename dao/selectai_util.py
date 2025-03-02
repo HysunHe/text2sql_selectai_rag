@@ -81,7 +81,7 @@ def query(
     return (result_array, raw_data, header_data)
 
 
-def runsql(
+def runsql2(
     user: Optional[str],
     sentence: str,
     llm_profile: str,
@@ -94,7 +94,7 @@ def runsql(
         return query(user, sql)
 
 
-def runsql_direct(
+def runsql(
     user: Optional[str],
     sentence: str,
     llm_profile: str,
@@ -102,7 +102,7 @@ def runsql_direct(
 ) -> tuple[Optional[List[any]], Optional[List[any]], Optional[List[str]]]:
     _logger.debug(f"Running runsql_direct ...[{llm_profile}]")
     sql = f"""
-        SELECT CUSTOM_SELECT_AI.SHOWSQL(
+        SELECT CUSTOM_SELECT_AI.RUNSQL(
             p_app_user      => '{user}',
             p_profile_name  => '{llm_profile}',
             p_text          => '{sentence}',
