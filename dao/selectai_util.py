@@ -144,16 +144,30 @@ def runsql(
 
 
 def chat(
-    user: Optional[str], sentence: str, llm_profile: str, debug: Optional[bool] = True
+    user: Optional[str],
+    sentence: str,
+    llm_profile: str,
+    system_prompt: Optional[str] = None,
+    debug: Optional[bool] = True,
 ) -> str:
     _logger.debug(f"Running chat ...[{llm_profile}]")
-    sql = f"""
-        SELECT CUSTOM_SELECT_AI.CHAT(
-            p_user      => '{user}',
-            p_profile_name  => '{llm_profile}',
-            p_text          => '{sentence}'
-        ) FROM dual
-    """
+    del user
+
+    if system_prompt:
+        sql = f"""
+            SELECT CUSTOM_SELECT_AI.CHAT(
+                p_profile_name  => '{llm_profile}',
+                p_user_text     => '{sentence}',
+                p_system_text   => '{system_prompt}'
+            ) FROM dual
+        """
+    else:
+        sql = f"""
+            SELECT CUSTOM_SELECT_AI.CHAT(
+                p_profile_name  => '{llm_profile}',
+                p_user_text     => '{sentence}'
+            ) FROM dual
+        """
 
     rows = []
     with selectai_pool.acquire() as connection:
@@ -173,12 +187,13 @@ def chat(
 def free_chat(
     user: Optional[str], sentence: str, llm_profile: str, debug: Optional[bool] = True
 ) -> Optional[str]:
-    prompt = (
-        f"select ai chat 'system: 你的名字叫ChatBI，是一个专业的商业智能助手，能回答用户关于数据查询分析方面的相关问题。\n"
-        f"user: {sentence} \n"
-        f"assistant: \n'"
+    return chat(
+        user=user,
+        sentence=sentence,
+        llm_profile=llm_profile,
+        system_prompt="你的名字叫ChatBI，是一个专业的商业智能助手，能回答用户关于数据查询分析方面的相关问题。",
+        debug=debug,
     )
-    return chat(user, prompt, llm_profile, debug)
 
 
 def set_vpd_appuser(client: Cursor, user: str) -> None:

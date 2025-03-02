@@ -35,7 +35,7 @@ create or replace package CUSTOM_SELECT_AI is
     ) return varchar2;
 
     function MAKE_LLM_REQUEST (
-        p_text              IN VARCHAR2,
+        p_prompt            IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
         p_wallet_path       IN VARCHAR2 default null,
         p_wallet_pwd        IN VARCHAR2 default null,
@@ -46,8 +46,9 @@ create or replace package CUSTOM_SELECT_AI is
     ) return varchar2;
 
     function CHAT (
-        p_text              IN VARCHAR2,
+        p_user_text         IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
+        p_system_text       IN VARCHAR2 default null,
         p_user              IN VARCHAR2 default null,
         p_wallet_path       IN VARCHAR2 default null,
         p_wallet_pwd        IN VARCHAR2 default null,
