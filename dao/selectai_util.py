@@ -36,7 +36,8 @@ def showsql(
     with selectai_pool.acquire() as connection:
         with connection.cursor() as cursor:
             for result in cursor.execute(sql):
-                rows.append(result[0].read())
+                _logger.debug(result)
+                rows.append(result[0])
 
     return rows[0]
 
@@ -158,7 +159,8 @@ def chat(
     with selectai_pool.acquire() as connection:
         with connection.cursor() as cursor:
             for result in cursor.execute(sql):
-                rows.append(result[0].read())
+                _logger.debug(result)
+                rows.append(result[0])
 
     if debug:
         _logger.debug(f"*** Chat Output ***")
