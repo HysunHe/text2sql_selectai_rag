@@ -102,7 +102,7 @@ def chat(
     system_prompt: Optional[str] = None,
     debug: Optional[bool] = True,
 ) -> str:
-    _logger.debug(f"Running chat ...[{llm_profile}]")
+    _logger.debug(f"Running chat ...[{sentence}]")
     del user
 
     if system_prompt:
