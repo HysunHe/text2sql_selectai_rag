@@ -260,13 +260,12 @@ create or replace package body CUSTOM_SELECT_AI is
 
         L_HTTP_REQUEST  UTL_HTTP.REQ;
         L_HTTP_RESPONSE UTL_HTTP.RESP;
-
         L_PROVIDER      varchar2(256);
         L_URL           varchar2(1024);
         L_TOKEN         varchar2(1024);
         L_RESPONSE_BODY clob;
         L_ANSWER        varchar2(32767);
-
+        V_PROMPT        varchar2(32767);
         V_MODEL         varchar2(256);
     begin
         select PROVIDER, MODEL into L_PROVIDER, V_MODEL
@@ -286,8 +285,12 @@ create or replace package body CUSTOM_SELECT_AI is
         "messages": <CONTENT>   
     }';
 
-        -- Construct request body
-        l_request_body := REPLACE(l_request_body,'<CONTENT>',p_prompt);
+        V_PROMPT := REPLACE(REPLACE(p_prompt,CHR(13),'\n'),CHR(10),'\n');
+        V_PROMPT := REPLACE(V_PROMPT,'\"','-^@^-');
+        V_PROMPT := REPLACE(V_PROMPT,'"','\"');
+        V_PROMPT := REPLACE(V_PROMPT,'-^@^-','\\\"');
+
+        l_request_body := REPLACE(l_request_body,'<CONTENT>',V_PROMPT);
         l_request_body := REPLACE(l_request_body,'<MODEL>',V_MODEL);
         l_request_body := REPLACE(l_request_body,'<TEMPERATURE>',TO_CHAR(p_temperature, '999990D99'));
         l_request_body := REPLACE(l_request_body,'<MAX_TOKENS>',TO_CHAR(p_max_tokens));
