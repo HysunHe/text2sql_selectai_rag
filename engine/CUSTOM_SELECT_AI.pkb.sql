@@ -197,6 +197,8 @@ create or replace package body CUSTOM_SELECT_AI is
         l_table_prompt varchar2(32767);
         l_table_info varchar2(32767);
         l_user_prompt VARCHAR2(4000);
+        l_his_question varchar2(4000);
+        l_his_sql varchar2(32767);
     begin
         l_user_prompt := REPLACE(REPLACE(p_text,CHR(13),'\n'),CHR(10),'\n');
         l_user_prompt := REPLACE(l_user_prompt,'"','\"');
@@ -254,14 +256,22 @@ create or replace package body CUSTOM_SELECT_AI is
             )) asc fetch first p_ref_count rows only
         )
         LOOP
+            l_his_question := his.question;
+            l_his_question := REPLACE(REPLACE(l_his_question,CHR(13),'\n'),CHR(10),'\n');
+
+            l_his_sql := his.sql_text;
+            l_his_sql := replace(l_his_sql, '''', '''''');
+            l_his_sql := replace(l_his_sql, '"', '\"');
+            l_his_sql := REPLACE(REPLACE(l_his_sql,CHR(13),'\n'),CHR(10),'\n');
+
             l_prompt := l_prompt || '
     {
         "role" : "user",
-        "content" : "' || his.question || '"
+        "content" : "' || l_his_question || '"
     },
     {
         "role" : "assistant",
-        "content" : "' || his.sql_text || '"
+        "content" : "' || l_his_sql || '"
     },';
         END LOOP;
 
