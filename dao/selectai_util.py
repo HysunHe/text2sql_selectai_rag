@@ -13,6 +13,7 @@ import logging
 from dao.db_pool import selectai_pool
 from conf import app_config
 from oracledb import Cursor
+from myutils import util_funcs
 from oracledb import DatabaseError
 from typing import List, Optional
 
@@ -27,7 +28,7 @@ def showsql(
         SELECT CUSTOM_SELECT_AI.SHOWSQL(
             p_user      => '{user}',
             p_profile_name  => '{llm_profile}',
-            p_text          => '{sentence}',
+            p_text          => '{util_funcs.escape(sentence)}',
             p_request_id    => '{request_id}'
         ) FROM dual
     """
@@ -110,15 +111,15 @@ def chat(
         sql = f"""
             SELECT CUSTOM_SELECT_AI.CHAT(
                 p_profile_name  => '{llm_profile}',
-                p_user_text     => '{sentence}',
-                p_system_text   => '{system_prompt}'
+                p_user_text     => '{util_funcs.escape(sentence)}',
+                p_system_text   => '{util_funcs.escape(system_prompt)}'
             ) FROM dual
         """
     else:
         sql = f"""
             SELECT CUSTOM_SELECT_AI.CHAT(
                 p_profile_name  => '{llm_profile}',
-                p_user_text     => '{sentence}'
+                p_user_text     => '{util_funcs.escape(sentence)}'
             ) FROM dual
         """
 

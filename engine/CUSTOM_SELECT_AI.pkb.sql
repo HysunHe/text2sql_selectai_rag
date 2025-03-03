@@ -195,7 +195,11 @@ create or replace package body CUSTOM_SELECT_AI is
         l_prompt varchar(32767);
         l_table_prompt varchar2(32767);
         l_table_info varchar2(32767);
+        l_user_prompt VARCHAR2(4000);
     begin
+        l_user_prompt := REPLACE(REPLACE(p_text,CHR(13),'\n'),CHR(10),'\n');
+        l_user_prompt := REPLACE(l_user_prompt,'"','\"');
+
         SELECT OBJECT_LIST INTO l_object_list
         from CUSTOM_SELECT_AI_PROFILES
         where UPPER(PROFILE_NAME)=UPPER(p_profile_name);
@@ -237,7 +241,7 @@ create or replace package body CUSTOM_SELECT_AI is
         l_prompt := l_prompt || '
     {
         "role" : "user",
-        "content" : "' || p_text || '"
+        "content" : "' || l_user_prompt || '"
     }
     ]';
         return l_prompt;
@@ -285,8 +289,7 @@ create or replace package body CUSTOM_SELECT_AI is
         "messages": <CONTENT>   
     }';
 
-        V_PROMPT := REPLACE(p_prompt, '''', '''''');
-        l_request_body := REPLACE(l_request_body,'<CONTENT>',V_PROMPT);
+        l_request_body := REPLACE(l_request_body,'<CONTENT>',p_prompt);
         l_request_body := REPLACE(l_request_body,'<MODEL>',V_MODEL);
         l_request_body := REPLACE(l_request_body,'<TEMPERATURE>',TO_CHAR(p_temperature, '999990D99'));
         l_request_body := REPLACE(l_request_body,'<MAX_TOKENS>',TO_CHAR(p_max_tokens));
