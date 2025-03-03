@@ -318,6 +318,7 @@ def execute_query(user: str, ask: str):
     user_question = f'<div class="user_question_section">问题复述：{selectai_prompt_sentence.split("。（")[0].split("？（")[0]}</div>'
     bot_answer = f'<div class="bot_answer_section">AI 回答：<br>{chat_response}</div>'
 
+    _logger.debug(f"ext_rpt_url: {ext_rpt_url}")
     if ext_rpt_url:
         ext_rpt_section = f'<div class="ext_report_section"><iframe src="{ext_rpt_url}"></iframe></div>'
     else:
