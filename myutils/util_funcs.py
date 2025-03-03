@@ -90,4 +90,4 @@ def is_valid_url(url):
 
 
 def escape(text: str) -> str:
-    return text.replace("'", "''")
+    return text.replace("'", "''").replace(":", "：")
