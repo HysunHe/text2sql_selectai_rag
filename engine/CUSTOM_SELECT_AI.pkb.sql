@@ -210,7 +210,7 @@ create or replace package body CUSTOM_SELECT_AI is
         l_prompt := '[
     {
         "role" : "system",
-        "content" : "You are a data analyst who is proficient in Oracle SQL. \n\nGiven an input Question, create a syntactically correct Oracle SQL query to run. \n - Pay attention to using only the column names that you can see in the schema description.\n - Be careful to not query for columns that do not exist. Also, pay attention to which column is in which table.\n - Please double check that the SQL query you generate is valid for Oracle Database.\n - Consider table name, schema name and column name to be case sensitive and enclose in double quotes.  - Only use the tables listed below. \n - If the table definition includes the table owner, you should include both the owner name and user-qualified table name in the Oracle SQL. - DO NOT keep empty lines in the middle of the Oracle SQL.\n - DO NOT write anything else except the Oracle SQL.\n - Always use table alias and easy to read column aliases. \n\nFor string comparisons in WHERE clause, CAREFULLY check if any string in the question is in DOUBLE QUOTES, and follow the rules: \n - If a string is in DOUBLE QUOTES, use case SENSITIVE comparisons with NO UPPER() function.\n - If a string is not in DOUBLE QUOTES, use case INSENSITIVE comparisons by using UPPER() function around both operands of the string comparison.\nNote: These rules apply strictly to string comparisons in the WHERE clause and do not affect column names, table names, or other query components.\n\n"
+        "content" : "You are a data analyst who is proficient in Oracle SQL. \n\nGiven an input Question, create a syntactically correct Oracle SQL query to run. \n - Pay attention to using only the column names that you can see in the schema description.\n - Be careful to not query for columns that do not exist. Also, pay attention to which column is in which table.\n - Please double check that the SQL query you generate is valid for Oracle Database.\n - If the question has been asked and answered before, please repeat the answer exactly as it was given before.\n - Consider table name, schema name and column name to be case sensitive and enclose in double quotes.  - Only use the tables listed below. \n - If the table definition includes the table owner, you should include both the owner name and user-qualified table name in the Oracle SQL. - DO NOT keep empty lines in the middle of the Oracle SQL.\n - DO NOT write anything else except the Oracle SQL.\n - Always use table alias and easy to read column aliases. \n\nFor string comparisons in WHERE clause, CAREFULLY check if any string in the question is in DOUBLE QUOTES, and follow the rules: \n - If a string is in DOUBLE QUOTES, use case SENSITIVE comparisons with NO UPPER() function.\n - If a string is not in DOUBLE QUOTES, use case INSENSITIVE comparisons by using UPPER() function around both operands of the string comparison.\nNote: These rules apply strictly to string comparisons in the WHERE clause and do not affect column names, table names, or other query components.\n\n"
     },
     {
         "role" : "system",
@@ -239,6 +239,32 @@ create or replace package body CUSTOM_SELECT_AI is
                     continue;
         end;
         END LOOP;
+
+        for his in (
+            select question, sql_text 
+            from CUSTOM_SELECT_AI_KNOWLEDGE 
+            order by vector_distance(embedding, dbms_vector.utl_to_embedding(
+                p_text,
+                json('{
+                    "provider": "OCIGenAI",
+                    "credential_name": "VECTOR_OCI_GENAI_CRED",
+                    "url": "https://inference.generativeai.us-chicago-1.oci.oraclecloud.com/20231130/actions/embedText",
+                    "model": "cohere.embed-multilingual-v3.0"
+                }')
+            )) asc fetch first p_ref_count rows only
+        )
+        LOOP
+            l_prompt := l_prompt || '
+    {
+        "role" : "user",
+        "content" : "' || his.question || '"
+    },
+    {
+        "role" : "assistant",
+        "content" : "' || his.sql_text || '"
+    },';
+        END LOOP;
+
         l_prompt := l_prompt || '
     {
         "role" : "user",
