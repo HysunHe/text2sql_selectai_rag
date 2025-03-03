@@ -467,6 +467,9 @@ create or replace package body CUSTOM_SELECT_AI is
             l_sql := l_sql ||' FETCH FIRST ' || p_max_rows || ' ROWS ONLY';
         END IF;
 
+        l_sql := replace(l_sql, '\''', '''');
+        l_sql := replace(l_sql, '''''', '''');
+
         if p_request_id is not null then
             insert into CUSTOM_SELECT_AI_HISTORY (
                 user_name,
