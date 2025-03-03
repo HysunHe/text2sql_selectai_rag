@@ -320,6 +320,8 @@ def execute_query(user: str, ask: str):
 
     if ext_rpt_url:
         ext_rpt_section = f'<div class="ext_report_section"><iframe src="{ext_rpt_url}"></iframe></div>'
+    else:
+        ext_rpt_section = ""
 
     return [
         {

@@ -319,7 +319,6 @@ create or replace package body CUSTOM_SELECT_AI is
         L_HTTP_RESPONSE := UTL_HTTP.GET_RESPONSE(L_HTTP_REQUEST);
         UTL_HTTP.READ_TEXT(L_HTTP_RESPONSE, L_RESPONSE_BODY);
         UTL_HTTP.END_RESPONSE(L_HTTP_RESPONSE);
-        L_RESPONSE_BODY := REPLACE(L_RESPONSE_BODY, '''', '''''');
 
         DBMS_OUTPUT.put_line('Response: ' || l_response_body);
 
@@ -427,7 +426,7 @@ create or replace package body CUSTOM_SELECT_AI is
 
         if l_valid <> 'OK' then
             DBMS_OUTPUT.put_line('LlmCapabilityLimitException: ' || l_valid);
-            return 'LlmCapabilityLimitException: Failure to generate SQL! ' || l_valid;
+            return 'LlmCapabilityLimitException! Failure to generate SQL! ' || l_valid || '. ' || l_sql;
         end if;
 
         if p_request_id is not null then

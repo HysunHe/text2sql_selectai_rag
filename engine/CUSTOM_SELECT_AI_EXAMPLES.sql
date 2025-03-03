@@ -36,10 +36,6 @@ select CUSTOM_SELECT_AI.SHOWSQL(
   p_text => '查询符合条件的各YIELD小等级占比（即YIELD_QTY之和/OUT_QTY之和），条件为：公司名称为COMPANY1，工厂名称为FACTORYNAME1，产品名称为PRODUCT1。占比用百分比表示并排序，用中文别名返回。'
 );
 
-select CUSTOM_SELECT_AI.RUNSQL(
-  p_profile_name => 'HKE_DEMO',
-  p_text => '查询符合条件的各YIELD小等级占比（即YIELD_QTY之和/OUT_QTY之和），条件为：公司名称为COMPANY1，工厂名称为FACTORYNAME1，产品名称为PRODUCT1。占比用百分比表示并排序，用中文别名返回。'
-);
 
 SELECT dbms_vector.utl_to_embedding(
     'This is a test',

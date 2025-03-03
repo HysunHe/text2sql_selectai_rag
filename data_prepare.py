@@ -20,7 +20,7 @@ SUPERVISED_QUESTIONS = [
     {
         "intent": "YIELD小等级占比",
         "selectai_prompt": """查询符合条件的各YIELD等级占比（计算方法：YIELD_QTY之和/OUT_QTY之和）$conditions（占比以百分比表示并保留两位小数，返回等级和占比两列）""",
-        "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=YIELD小等级占比",
+        # "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=YIELD小等级占比",
         "chart_type": "bar",
         "chart_data_cols": "1",
         "chart_name_cols": "0",
@@ -45,7 +45,7 @@ SUPERVISED_QUESTIONS = [
     {
         "intent": "LOSS小等级占比",
         "selectai_prompt": """查询缺陷产品的各等级占比（计算方法：DEFECT_QTY之和/OUT_QTY之和）$conditions（占比以百分比表示并保留两位小数，返回等级和占比两列）""",
-        "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=LOSS小等级占比",
+        # "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=LOSS小等级占比",
         "chart_type": "bar",
         "chart_data_cols": "1",
         "chart_name_cols": "0",
@@ -75,7 +75,7 @@ SUPERVISED_QUESTIONS = [
     {
         "intent": "不良排名",
         "selectai_prompt": """按公司、工厂和产品分组统计不良排名$conditions（返回公司名称、工厂名称、产品名称、不良数量和不良率五列，不良率用百分比表示并取两位小数，结果按不良率排序显示）""",
-        "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=不良排名",
+        # "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=不良排名",
         "params": """[{
             "name": "COMPANY_NAME",
             "required": "false",
@@ -97,7 +97,7 @@ SUPERVISED_QUESTIONS = [
     {
         "intent": "良率统计",
         "selectai_prompt": """按产品名称分组查询各产品综合良率$conditions（返回产品名称和综合良率两列，其中综合良率以百分比表示并保留两位小数）""",
-        "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=良率系统览",
+        # "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=良率系统览",
         "chart_type": "pie",
         "chart_data_cols": "1",
         "chart_name_cols": "0",
@@ -122,7 +122,7 @@ SUPERVISED_QUESTIONS = [
     {
         "intent": "不良分布",
         "selectai_prompt": """查询各等级的缺陷总数量$conditions（按缺陷总数量倒序显示并返回等级和缺陷总数量两列）""",
-        "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=不良等级分布趋势图",
+        # "ext_report_url": "https://slurm.hysun.cloudns.asia/hke-ext/test.html?title=不良等级分布趋势图",
         "chart_type": "bar",
         "chart_data_cols": "1",
         "chart_name_cols": "0",
