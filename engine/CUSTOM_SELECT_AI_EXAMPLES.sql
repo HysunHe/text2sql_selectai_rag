@@ -11,6 +11,7 @@ BEGIN
 END;
 /
 
+
 BEGIN
 	CUSTOM_SELECT_AI.CREATE_PROFILE(
       p_profile_name    =>'HKE_DEMO',
@@ -19,7 +20,33 @@ BEGIN
           "provider": "qwen",
           "model" : "qwen-max-2025-01-25",
           "object_list": [{"owner": "POCUSER", "name": "HKE_PROD_DEFECT"},
-                          {"owner": "POCUSER", "name": "HKE_PROD_OUT_YEILD_QTY"}
+                          {"owner": "POCUSER", "name": "HKE_PROD_OUT_YIELD_QTY"}
+                          ]
+      }'
+    );
+END;
+/
+
+
+BEGIN
+  CUSTOM_SELECT_AI.CREATE_PROVIDER(
+		p_provider    =>    'qwen',
+		p_endpoint    =>    'http://132.145.95.18:8098/v1/chat/completions',
+		p_auth        =>    'EMPTY'
+	);
+END;
+/
+
+
+BEGIN
+	CUSTOM_SELECT_AI.CREATE_PROFILE(
+      p_profile_name    =>'HKE_DEMO',
+      p_description     => 'SelectAI DEMO for HKE',
+      p_attributes      => '{
+          "provider": "qwen",
+          "model" : "Qwen2.5-14B-Instruct-AWQ",
+          "object_list": [{"owner": "POCUSER", "name": "HKE_PROD_DEFECT"},
+                          {"owner": "POCUSER", "name": "HKE_PROD_OUT_YIELD_QTY"}
                           ]
       }'
     );
@@ -28,7 +55,7 @@ END;
 
 select CUSTOM_SELECT_AI.CHAT(
   p_profile_name => 'HKE_DEMO',
-  p_text => 'hello'
+  p_user_text => 'hello'
 );
 
 select CUSTOM_SELECT_AI.SHOWSQL(
@@ -56,17 +83,4 @@ BEGIN
                            principal_name => 'POCUSER',
                            principal_type => xs_acl.ptype_db));
 END;
-/
-
-
-set serveroutput on;
-declare
- l_user_prompt       VARCHAR2(4000);
-  p_user_text varchar2(1000) := '## <用户问题>:
-                你好';
-begin
-        l_user_prompt := REPLACE(REPLACE(p_user_text,CHR(13),'\n'),CHR(10),'\n');
-        l_user_prompt := REPLACE(l_user_prompt,'"','\"');
-    dbms_output.put_line(l_user_prompt);
-end;
 /

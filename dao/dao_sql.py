@@ -72,7 +72,7 @@ def list_selectai_intents() -> str:
 
 def list_companies() -> str:
     services = []
-    sql = "SELECT DISTINCT COMPANY FROM hke_prod_out_yeild_qty"
+    sql = "SELECT DISTINCT COMPANY FROM HKE_PROD_OUT_YIELD_QTY"
     with db_pool.selectai_pool.acquire() as connection:
         with connection.cursor() as cursor:
             cursor.callproc(
@@ -86,7 +86,7 @@ def list_companies() -> str:
 
 def list_factories() -> str:
     intents = []
-    sql = "SELECT DISTINCT FACTORYNAME FROM hke_prod_out_yeild_qty"
+    sql = "SELECT DISTINCT FACTORYNAME FROM HKE_PROD_OUT_YIELD_QTY"
     with db_pool.selectai_pool.acquire() as connection:
         with connection.cursor() as cursor:
             cursor.callproc(
@@ -100,7 +100,7 @@ def list_factories() -> str:
 
 def list_products() -> str:
     intents = []
-    sql = "SELECT DISTINCT PRODUCT FROM hke_prod_out_yeild_qty"
+    sql = "SELECT DISTINCT PRODUCT FROM HKE_PROD_OUT_YIELD_QTY"
     with db_pool.selectai_pool.acquire() as connection:
         with connection.cursor() as cursor:
             cursor.callproc(
@@ -114,7 +114,7 @@ def list_products() -> str:
 
 def list_grades() -> str:
     intents = []
-    sql = "SELECT DISTINCT GRADE FROM hke_prod_out_yeild_qty"
+    sql = "SELECT DISTINCT GRADE FROM HKE_PROD_OUT_YIELD_QTY"
     with db_pool.selectai_pool.acquire() as connection:
         with connection.cursor() as cursor:
             cursor.callproc(

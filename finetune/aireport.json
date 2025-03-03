@@ -2,6 +2,6 @@
     {
         "instruction": "查询符合条件的各YIELD小等级占比（即YIELD_QTY之和/OUT_QTY之和），条件为：公司名称为COMPANY1，工厂名称为FACTORYNAME1，产品名称为PRODUCT1。占比用百分比表示并排序，用中文别名返回。",
         "input": "",
-        "output": "\nSELECT \n  \"GRADE\" AS \"等级\",\n  ROUND(SUM(\"YIELD_QTY\") / SUM(\"OUT_QTY\") * 100, 2) AS \"占比\"\nFROM \n  \"HYSUN\".\"HKE_PROD_OUT_YEILD_QTY\"\nWHERE \n  UPPER(\"COMPANY\") = UPPER('COMPANY1')\n  AND UPPER(\"FACTORYNAME\") = UPPER('FACTORYNAME1')\n  AND UPPER(\"PRODUCT\") = UPPER('PRODUCT1')\nGROUP BY \n  \"GRADE\"\nORDER BY \n  \"占比\" DESC\n"
+        "output": "\nSELECT \n  \"GRADE\" AS \"等级\",\n  ROUND(SUM(\"YIELD_QTY\") / SUM(\"OUT_QTY\") * 100, 2) AS \"占比\"\nFROM \n  \"HYSUN\".\"HKE_PROD_OUT_YIELD_QTY\"\nWHERE \n  UPPER(\"COMPANY\") = UPPER('COMPANY1')\n  AND UPPER(\"FACTORYNAME\") = UPPER('FACTORYNAME1')\n  AND UPPER(\"PRODUCT\") = UPPER('PRODUCT1')\nGROUP BY \n  \"GRADE\"\nORDER BY \n  \"占比\" DESC\n"
     }
 ]

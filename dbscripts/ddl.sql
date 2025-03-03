@@ -21,7 +21,7 @@ begin
                 "oci_apiformat": "GENERIC",
                 "temperature": 0,
                 "comments": true,
-                "object_list": [{"owner":"HYSUN","name":"HKE_PROD_DEFECT"},{"owner":"HYSUN","name":"HKE_PROD_OUT_YEILD_QTY"}]
+                "object_list": [{"owner":"HYSUN","name":"HKE_PROD_DEFECT"},{"owner":"HYSUN","name":"HKE_PROD_OUT_YIELD_QTY"}]
             }'
         );
 end;
@@ -38,7 +38,7 @@ begin
                 "oci_apiformat": "GENERIC",
                 "temperature": 0,
                 "comments": true,
-                "object_list": [{"owner":"HYSUN","name":"HKE_PROD_DEFECT"},{"owner":"HYSUN","name":"HKE_PROD_OUT_YEILD_QTY"}]
+                "object_list": [{"owner":"HYSUN","name":"HKE_PROD_DEFECT"},{"owner":"HYSUN","name":"HKE_PROD_OUT_YIELD_QTY"}]
             }'
         );
 end;
@@ -56,7 +56,7 @@ begin
                 "oci_apiformat": "GENERIC",
                 "temperature": 0,
                 "comments": true,
-                "object_list": [{"owner":"HYSUN","name":"HKE_PROD_DEFECT"},{"owner":"HYSUN","name":"HKE_PROD_OUT_YEILD_QTY"}]
+                "object_list": [{"owner":"HYSUN","name":"HKE_PROD_DEFECT"},{"owner":"HYSUN","name":"HKE_PROD_OUT_YIELD_QTY"}]
             }'
         );
 end;

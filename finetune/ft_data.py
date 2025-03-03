@@ -38,7 +38,7 @@ prompt = """
     [
       {
         "type" : "TEXT",
-        "text" : "# CREATE TABLE \"HYSUN\".\"HKE_PROD_OUT_YEILD_QTY\" (\"COMPANY\" VARCHAR2(50) '公司名称', \"NEW_OLD_PRODUCT\" VARCHAR2(50) '新旧标记', \"YIELD_QTY\" NUMBER '合格数量', \"OUT_QTY\" NUMBER '产出数量', \"GRADE\" VARCHAR2(50) '等级', \"FACTORYNAME\" VARCHAR2(100) '工厂名称', \"PRODUCT\" VARCHAR2(50) '产品名称', \"TIMEVALUE\" NUMBER '时间数值', \"TIMEFLAG\" VARCHAR2(1) '时间标记')"
+        "text" : "# CREATE TABLE \"HYSUN\".\"HKE_PROD_OUT_YIELD_QTY\" (\"COMPANY\" VARCHAR2(50) '公司名称', \"NEW_OLD_PRODUCT\" VARCHAR2(50) '新旧标记', \"YIELD_QTY\" NUMBER '合格数量', \"OUT_QTY\" NUMBER '产出数量', \"GRADE\" VARCHAR2(50) '等级', \"FACTORYNAME\" VARCHAR2(100) '工厂名称', \"PRODUCT\" VARCHAR2(50) '产品名称', \"TIMEVALUE\" NUMBER '时间数值', \"TIMEFLAG\" VARCHAR2(1) '时间标记')"
       }
     ]
   },
@@ -59,7 +59,7 @@ SELECT
   "GRADE" AS "等级",
   ROUND(SUM("YIELD_QTY") / SUM("OUT_QTY") * 100, 2) AS "占比"
 FROM 
-  "HYSUN"."HKE_PROD_OUT_YEILD_QTY"
+  "HYSUN"."HKE_PROD_OUT_YIELD_QTY"
 WHERE 
   UPPER("COMPANY") = UPPER('COMPANY1')
   AND UPPER("FACTORYNAME") = UPPER('FACTORYNAME1')
