@@ -39,6 +39,11 @@ SUPERVISED_QUESTIONS = [
             "required": "true",
             "prompt": "产品名称为<PRODUCT_NAME>",
             "label": "产品名称"
+        }, {
+            "name": "GRADE",
+            "required": "false",
+            "prompt": "等级为<GRADE>",
+            "label": "等级"
         }]""",
         "examples": ["YIELD小等级占比"],
     },

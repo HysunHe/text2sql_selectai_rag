@@ -183,8 +183,9 @@ create or replace package body CUSTOM_SELECT_AI is
 
 
     function SHOWPROMPT(
-        p_text varchar2,
-        p_profile_name varchar2
+        p_text              IN VARCHAR2,
+        p_profile_name      IN VARCHAR2,
+        p_ref_count         IN NUMBER default 5
     ) RETURN VARCHAR2 IS    
         l_object_list clob;
         l_object_list_array JSON_ARRAY_T;
@@ -390,6 +391,8 @@ create or replace package body CUSTOM_SELECT_AI is
     function SHOWSQL (
         p_text              IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
+        p_max_rows          IN NUMBER default 20,
+        p_ref_count         IN NUMBER default 5,
         p_user              IN VARCHAR2 default null,
         p_request_id        IN VARCHAR2 default null,
         p_wallet_path       IN VARCHAR2 default null,
@@ -405,7 +408,8 @@ create or replace package body CUSTOM_SELECT_AI is
     begin
         l_prompt := SHOWPROMPT(
             p_profile_name => p_profile_name,
-            p_text => p_text
+            p_text => p_text,
+            p_ref_count => p_ref_count
         );
 
         l_sql := MAKE_LLM_REQUEST(
@@ -422,6 +426,25 @@ create or replace package body CUSTOM_SELECT_AI is
         DBMS_OUTPUT.put_line(l_sql);
 
         l_sql := CLEANSQL(l_sql);
+        IF INSTR(lower(l_sql),'fetch ') = 0 THEN 
+            l_sql := l_sql ||' FETCH FIRST ' || p_max_rows || ' ROWS ONLY';
+        END IF;
+
+        if p_request_id is not null then
+            insert into CUSTOM_SELECT_AI_HISTORY (
+                user_name,
+                request_id,
+                question,
+                sql_text
+            ) values (
+                p_user,
+                p_request_id,
+                p_text,
+                l_sql
+            );
+            commit;
+        end if;
+
         l_valid := VALIDSQL(l_sql);
 
         if l_valid <> 'OK' then
@@ -429,67 +452,8 @@ create or replace package body CUSTOM_SELECT_AI is
             return 'LlmCapabilityLimitException! Failure to generate SQL! ' || l_valid || '. ' || l_sql;
         end if;
 
-        if p_request_id is not null then
-            insert into CUSTOM_SELECT_AI_EMBEDDINGS(
-                user_name,
-                request_id,
-                question,
-                sql_text,
-                embedding
-            ) values (
-                p_user,
-                p_request_id,
-                p_text,
-                l_sql,
-                dbms_vector.utl_to_embedding(
-                    p_text,
-                    json('{
-                        "provider": "OCIGenAI",
-                        "credential_name": "VECTOR_OCI_GENAI_CRED",
-                        "url": "https://inference.generativeai.us-chicago-1.oci.oraclecloud.com/20231130/actions/embedText",
-                        "model": "cohere.embed-multilingual-v3.0"
-                    }')
-                )
-            );
-            commit;
-        end if;
-
         return l_sql;
     end SHOWSQL;
-
-
-    PROCEDURE RUNSQL (
-        p_text              IN VARCHAR2,
-        p_profile_name      IN VARCHAR2,
-        p_max_rows          IN NUMBER default 20,
-        p_user              IN VARCHAR2 default null,
-        p_request_id        IN VARCHAR2 default null,
-        p_wallet_path       IN VARCHAR2 default null,
-        p_wallet_pwd        IN VARCHAR2 default null,
-        p_proxy             IN VARCHAR2 default null,
-        p_no_proxy_domains  IN VARCHAR2 default null
-    ) is
-        l_sql               VARCHAR2(4000);
-        v_result            SYS_REFCURSOR;
-    begin
-        l_sql := SHOWSQL(
-            p_text => p_text,
-            p_profile_name => p_profile_name,
-            p_user => p_user,
-            p_request_id => p_request_id,
-            p_wallet_path => p_wallet_path,
-            p_wallet_pwd => p_wallet_pwd,
-            p_proxy => p_proxy,
-            p_no_proxy_domains => p_no_proxy_domains
-        );
-
-        IF INSTR(lower(l_sql),'fetch ') = 0 THEN 
-            l_sql := l_sql ||' FETCH FIRST ' || p_max_rows || ' ROWS ONLY';
-        END IF;
-
-        OPEN v_result FOR l_sql;
-        DBMS_SQL.RETURN_RESULT(v_result);
-    end RUNSQL;
 
 end CUSTOM_SELECT_AI;
 /

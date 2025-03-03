@@ -30,8 +30,9 @@ create or replace package CUSTOM_SELECT_AI is
     ) return varchar2;
 
     function SHOWPROMPT(
-        p_text varchar2,
-        p_profile_name varchar2
+        p_text              IN VARCHAR2,
+        p_profile_name      IN VARCHAR2,
+        p_ref_count         IN NUMBER default 5
     ) return varchar2;
 
     function MAKE_LLM_REQUEST (
@@ -59,6 +60,8 @@ create or replace package CUSTOM_SELECT_AI is
     function SHOWSQL(
         p_text              IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
+        p_max_rows          IN NUMBER default 20,
+        p_ref_count         IN NUMBER default 5,
         p_user              IN VARCHAR2 default null,
         p_request_id        IN VARCHAR2 default null,
         p_wallet_path       IN VARCHAR2 default null,
@@ -66,18 +69,6 @@ create or replace package CUSTOM_SELECT_AI is
         p_proxy             IN VARCHAR2 default null,
         p_no_proxy_domains  IN VARCHAR2 default null
     ) return varchar2;
-
-    PROCEDURE RUNSQL (
-        p_text              IN VARCHAR2,
-        p_profile_name      IN VARCHAR2,
-        p_max_rows          IN NUMBER default 20,
-        p_user              IN VARCHAR2 default null,
-        p_request_id        IN VARCHAR2 default null,
-        p_wallet_path       IN VARCHAR2 default null,
-        p_wallet_pwd        IN VARCHAR2 default null,
-        p_proxy             IN VARCHAR2 default null,
-        p_no_proxy_domains  IN VARCHAR2 default null
-    );
 
 end CUSTOM_SELECT_AI;
 /
