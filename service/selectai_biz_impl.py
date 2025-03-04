@@ -59,7 +59,7 @@ def determine_intent(user: str, ask: str) -> str:
 
     if intent != "其它类别":
         free_chat_intents = dao_sql.list_chat_intents()
-        _logger.debug(f"free_chat_intents: {free_chat_intents.split("\n")}")
+        _logger.debug(f"free_chat_intents: {free_chat_intents.split()}")
         if intent in free_chat_intents:
             _logger.debug(f"Non-SelectAI intent: {intent}")
         else:
