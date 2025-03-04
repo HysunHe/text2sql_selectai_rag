@@ -9,7 +9,7 @@ History:
 import os
 from dotenv import load_dotenv
 
-load_dotenv("app.env")
+load_dotenv("../app.env")
 
 # Database connection information
 DB_HOST = os.environ.get("DB_HOST")
