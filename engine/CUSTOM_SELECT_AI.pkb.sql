@@ -183,7 +183,7 @@ create or replace package body CUSTOM_SELECT_AI is
 
 
     function SHOWPROMPT(
-        p_text              IN VARCHAR2,
+        p_user_text              IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
         p_ref_count         IN NUMBER default 5
     ) RETURN VARCHAR2 IS    
@@ -200,7 +200,7 @@ create or replace package body CUSTOM_SELECT_AI is
         l_his_question varchar2(4000);
         l_his_sql varchar2(32767);
     begin
-        l_user_prompt := REPLACE(REPLACE(p_text,CHR(13),'\n'),CHR(10),'\n');
+        l_user_prompt := REPLACE(REPLACE(p_user_text,CHR(13),'\n'),CHR(10),'\n');
         l_user_prompt := REPLACE(l_user_prompt,'"','\"');
 
         SELECT OBJECT_LIST INTO l_object_list
@@ -246,7 +246,7 @@ create or replace package body CUSTOM_SELECT_AI is
             select question, sql_text 
             from CUSTOM_SELECT_AI_KNOWLEDGE 
             order by vector_distance(embedding, dbms_vector.utl_to_embedding(
-                p_text,
+                p_user_text,
                 json('{
                     "provider": "OCIGenAI",
                     "credential_name": "VECTOR_OCI_GENAI_CRED",
@@ -426,7 +426,7 @@ create or replace package body CUSTOM_SELECT_AI is
     
 
     function SHOWSQL (
-        p_text              IN VARCHAR2,
+        p_user_text              IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
         p_max_rows          IN NUMBER default 20,
         p_ref_count         IN NUMBER default 5,
@@ -445,7 +445,7 @@ create or replace package body CUSTOM_SELECT_AI is
     begin
         l_prompt := SHOWPROMPT(
             p_profile_name => p_profile_name,
-            p_text => p_text,
+            p_user_text => p_user_text,
             p_ref_count => p_ref_count
         );
 
@@ -479,7 +479,7 @@ create or replace package body CUSTOM_SELECT_AI is
             ) values (
                 p_user,
                 p_request_id,
-                p_text,
+                p_user_text,
                 l_sql
             );
             commit;

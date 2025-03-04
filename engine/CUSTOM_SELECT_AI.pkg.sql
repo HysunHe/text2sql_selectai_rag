@@ -30,7 +30,7 @@ create or replace package CUSTOM_SELECT_AI is
     ) return varchar2;
 
     function SHOWPROMPT(
-        p_text              IN VARCHAR2,
+        p_user_text         IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
         p_ref_count         IN NUMBER default 5
     ) return varchar2;
@@ -58,7 +58,7 @@ create or replace package CUSTOM_SELECT_AI is
     ) return varchar2;
 
     function SHOWSQL(
-        p_text              IN VARCHAR2,
+        p_user_text         IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
         p_max_rows          IN NUMBER default 20,
         p_ref_count         IN NUMBER default 5,

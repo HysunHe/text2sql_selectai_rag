@@ -3,6 +3,9 @@ set serveroutput on;
 EXEC CUSTOM_SELECT_AI.DROP_PROVIDER('qwen');
 EXEC CUSTOM_SELECT_AI.DROP_PROFILE('HKE_DEMO');
 
+
+------------------ Cloud --------------------
+----- Create service provider
 BEGIN
   CUSTOM_SELECT_AI.CREATE_PROVIDER(
 		p_provider    =>    'qwen',
@@ -12,7 +15,7 @@ BEGIN
 END;
 /
 
-
+----- Create profile
 BEGIN
 	CUSTOM_SELECT_AI.CREATE_PROFILE(
       p_profile_name    =>'HKE_DEMO',
@@ -29,6 +32,8 @@ END;
 /
 
 
+------------------ Local Deployed Qwen2.5-14B-Instruct On A10 --------------------
+------ Create local provider
 BEGIN
   CUSTOM_SELECT_AI.CREATE_PROVIDER(
 		p_provider    =>    'qwen',
@@ -38,7 +43,7 @@ BEGIN
 END;
 /
 
-
+------ Create profile
 BEGIN
 	CUSTOM_SELECT_AI.CREATE_PROFILE(
       p_profile_name    =>'HKE_DEMO',
@@ -54,6 +59,34 @@ BEGIN
 END;
 /
 
+
+------------------ Local Deployed Qwen2.5-Coder-14B-Instruct On A10 --------------------
+------ Create provider (local deployed)
+BEGIN
+  CUSTOM_SELECT_AI.CREATE_PROVIDER(
+		p_provider    =>    'qwen',
+		p_endpoint    =>    'http://132.145.95.18:8098/v1/chat/completions',
+		p_auth        =>    'EMPTY'
+	);
+END;
+/
+
+------ Create profile
+BEGIN
+	CUSTOM_SELECT_AI.CREATE_PROFILE(
+      p_profile_name    =>'HKE_DEMO',
+      p_description     => 'SelectAI DEMO for HKE',
+      p_attributes      => '{
+          "provider": "qwen",
+          "model" : "Qwen2.5-Coder-14B-Instruct-AWQ",
+          "object_list": [{"owner": "POCUSER", "name": "HKE_PROD_DEFECT"},
+                          {"owner": "POCUSER", "name": "HKE_PROD_OUT_YIELD_QTY"}
+                          ]
+      }'
+    );
+END;
+/
+
 select CUSTOM_SELECT_AI.CHAT(
   p_profile_name => 'HKE_DEMO',
   p_user_text => 'hello'
@@ -61,27 +94,6 @@ select CUSTOM_SELECT_AI.CHAT(
 
 select CUSTOM_SELECT_AI.SHOWSQL(
   p_profile_name => 'HKE_DEMO',
-  p_text => '查询符合条件的各YIELD小等级占比（即YIELD_QTY之和/OUT_QTY之和），条件为：公司名称为COMPANY1，工厂名称为FACTORYNAME1，产品名称为PRODUCT1。占比用百分比表示并排序，用中文别名返回。'
+  p_user_text => '查询符合条件的各YIELD小等级占比（即YIELD_QTY之和/OUT_QTY之和），条件为：公司名称为COMPANY1，工厂名称为FACTORYNAME1，产品名称为PRODUCT1。占比用百分比表示并排序，用中文别名返回。'
 );
 
-
-SELECT dbms_vector.utl_to_embedding(
-    'This is a test',
-    json('{
-        "provider": "OCIGenAI",
-        "credential_name": "VECTOR_OCI_GENAI_CRED",
-        "url": "https://inference.generativeai.us-chicago-1.oci.oraclecloud.com/20231130/actions/embedText",
-        "model": "cohere.embed-multilingual-v3.0"
-    }')
-);
-
-select * FROM user_credentials;
-
-BEGIN
-    DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
-        host => '*',
-        ace => xs$ace_type(privilege_list => xs$name_list('connect'),
-                           principal_name => 'POCUSER',
-                           principal_type => xs_acl.ptype_db));
-END;
-/
