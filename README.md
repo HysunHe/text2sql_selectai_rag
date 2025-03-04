@@ -162,7 +162,7 @@ BEGIN
   CUSTOM_SELECT_AI.CREATE_PROVIDER(
 		p_provider    =>    'qwen',
 		p_endpoint    =>    'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
-		p_auth        =>    'sk-75229e7e569449129daf5eed56440003'
+		p_auth        =>    'sk-75229e7exxxxxxxxxxxxxxxxxxxxxxxx'
 	);
 END;
 /
