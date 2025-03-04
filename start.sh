@@ -1,5 +1,3 @@
-cd /home/ubuntu/Hysun/text2sql_selectai_rag
-. app.env
 
 kill -9 `lsof -i:8080 | awk '{print $2}' | grep -v "PID"` > /dev/null 2>&1
 
@@ -12,11 +10,18 @@ nohup python main.py > /dev/null 2>&1 &
 
 arg1=$1
 
+log_file=$LOG_FILE_PATH
+
+if [[ -z $log_file ]]
+then
+        log_file=`grep "LOG_FILE_PATH" app.env | sed  "s/LOG_FILE_PATH=//"`
+fi
+
 if [[ $arg1 != "nowait" ]]
 then
         while true
         do
-                result=`tail $LOG_FILE_PATH`
+                result=`tail $log_file`
                 if [[ $result == *"WSGI server listening at"* ]]; then
                         echo 'Service started.'
                         break
@@ -31,4 +36,4 @@ cd - > /dev/null
 
 echo "--------------"
 
-echo "To view logs, run the command [ tail -300f $LOG_FILE_PATH ]"
+echo "To view logs, run the command [ tail -300f $log_file ]"
