@@ -58,8 +58,11 @@ def determine_intent(user: str, ask: str) -> str:
     _logger.debug(f"### Intent determined(llm): {intent}")
     if intent != "其它类别":
         free_chat_intents = dao_sql.list_chat_intents()
+        _logger.debug(f"free_chat_intents: {free_chat_intents}")
         if intent not in free_chat_intents:
+            _logger.debug("Checking vector distance...")
             vector_check = dao_sql.check_intent_distance(ask=ask, intent=intent)
+            _logger.debug(f"Checking vector distance...{vector_check}")
             if not vector_check:
                 intent = "其它类别"
     _logger.debug(f"### Intent determined(dbcheck): {intent}")
