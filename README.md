@@ -98,6 +98,24 @@ END;
 /
 ```
 
+### 创建 Embedding Config
+
+RAG的向量化过程需要用到。可以是兼容OpenAI消息格式的任何模型，包括自己部署的本地Embedding模型 或 云服务都可以。如果SHOWSQL不指定，则使用这里配置的 ID 为 DEFAULT 的 Embedding 配置。
+
+```sql
+BEGIN
+  CUSTOM_SELECT_AI.CREATE_EMBEDDING_CONF(
+        p_conf_id     =>    'DEFAULT',
+		p_provider    =>    'OCIGenAI',
+        p_model       =>    'cohere.embed-multilingual-v3.0',
+		p_endpoint    =>    'https://inference.generativeai.us-chicago-1.oci.oraclecloud.com/20231130/actions/embedText',
+		p_credential  =>    'VECTOR_OCI_GENAI_CRED'
+	);
+END;
+/
+```
+
+
 ## 接口及样例
 ### CHAT接口 - 直接与 LLM 聊天
 ```sql
@@ -112,6 +130,7 @@ select CUSTOM_SELECT_AI.CHAT(
 ```sql
 select CUSTOM_SELECT_AI.SHOWSQL(
   	p_profile_name => 'HKE_DEMO',
+    p_embedding_conf => 'DEFAULT',
   	p_user_text => '查询符合条件的各YIELD小等级占比（即YIELD_QTY之和/OUT_QTY之和），条件为：公司名称为COMPANY1，工厂名称为FACTORYNAME1，产品名称为PRODUCT1。占比用百分比表示并排序，用中文别名返回。'
 );
 ```

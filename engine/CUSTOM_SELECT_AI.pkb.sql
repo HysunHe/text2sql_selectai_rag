@@ -17,10 +17,6 @@ create or replace package body CUSTOM_SELECT_AI is
             p_auth
         );
         commit;
-    exception
-        when others then
-            rollback;
-            DBMS_OUTPUT.PUT_LINE('ERROR CREATE_PROVIDER: ' || SQLERRM);
     end CREATE_PROVIDER;
 
 
@@ -30,13 +26,40 @@ create or replace package body CUSTOM_SELECT_AI is
     begin
         delete from CUSTOM_SELECT_AI_PROVIDERS where PROVIDER = p_provider;
         commit;
-    exception
-        when NO_DATA_FOUND then
-            DBMS_OUTPUT.PUT_LINE('ERROR: PROVIDER NOT FOUND');
-        when others then
-            rollback;
-            DBMS_OUTPUT.PUT_LINE('ERROR DROP_PROVIDERL: ' || SQLERRM);
     end DROP_PROVIDER;
+
+
+    procedure CREATE_EMBEDDING_CONF (
+        p_conf_id           IN VARCHAR2,
+        p_provider          IN VARCHAR2,
+        p_model             IN VARCHAR2,
+        p_endpoint          IN VARCHAR2,
+        p_credential        IN VARCHAR2
+    ) is
+    begin
+        insert into CUSTOM_SELECT_AI_EMBEDDING_CONF (
+            CONF_ID,
+            PROVIDER,
+            MODEL,
+            ENDPOINT,
+            CREDENTIAL
+        ) values (
+            p_conf_id,
+            p_provider,
+            p_model,
+            p_endpoint,
+            p_credential
+        );
+        commit;
+    end CREATE_EMBEDDING_CONF;
+
+    procedure DROP_EMBEDDING_CONF (
+        p_conf_id          IN VARCHAR2
+    ) is
+    begin
+        delete from CUSTOM_SELECT_AI_EMBEDDING_CONF where CONF_ID = p_conf_id;
+        commit;
+    end DROP_EMBEDDING_CONF;
 
 
     procedure CREATE_PROFILE (
@@ -183,8 +206,9 @@ create or replace package body CUSTOM_SELECT_AI is
 
 
     function SHOWPROMPT(
-        p_user_text              IN VARCHAR2,
+        p_user_text         IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
+        p_embedding_conf    IN VARCHAR2 default 'DEFAULT',
         p_ref_count         IN NUMBER default 5
     ) RETURN VARCHAR2 IS    
         l_object_list clob;
@@ -199,6 +223,11 @@ create or replace package body CUSTOM_SELECT_AI is
         l_user_prompt VARCHAR2(4000);
         l_his_question varchar2(4000);
         l_his_sql varchar2(32767);
+
+        l_embedding_provider varchar2(100);
+        l_embedding_endpoint varchar2(1000);
+        l_embedding_model varchar2(256);
+        l_embedding_credential varchar2(100);
     begin
         l_user_prompt := REPLACE(REPLACE(p_user_text,CHR(13),'\n'),CHR(10),'\n');
         l_user_prompt := REPLACE(l_user_prompt,'"','\"');
@@ -242,16 +271,20 @@ create or replace package body CUSTOM_SELECT_AI is
         end;
         END LOOP;
 
+        select provider, endpoint, model, credential into l_embedding_provider, l_embedding_endpoint, l_embedding_model, l_embedding_credential
+        from CUSTOM_SELECT_AI_EMBEDDING_CONF
+        where conf_id = p_embedding_conf;
+
         for his in (
             select question, sql_text 
             from CUSTOM_SELECT_AI_KNOWLEDGE 
             order by vector_distance(embedding, dbms_vector.utl_to_embedding(
                 p_user_text,
                 json('{
-                    "provider": "OCIGenAI",
-                    "credential_name": "VECTOR_OCI_GENAI_CRED",
-                    "url": "https://inference.generativeai.us-chicago-1.oci.oraclecloud.com/20231130/actions/embedText",
-                    "model": "cohere.embed-multilingual-v3.0"
+                    "provider": "' || l_embedding_provider || '",
+                    "credential_name": "' || l_embedding_credential || '",
+                    "url": "' || l_embedding_endpoint || '",
+                    "model": "' || l_embedding_model || '"
                 }')
             )) asc 
             fetch first p_ref_count rows only
@@ -426,8 +459,9 @@ create or replace package body CUSTOM_SELECT_AI is
     
 
     function SHOWSQL (
-        p_user_text              IN VARCHAR2,
+        p_user_text         IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
+        p_embedding_conf    IN VARCHAR2 default 'DEFAULT',
         p_max_rows          IN NUMBER default 20,
         p_ref_count         IN NUMBER default 5,
         p_user              IN VARCHAR2 default null,
@@ -446,6 +480,7 @@ create or replace package body CUSTOM_SELECT_AI is
         l_prompt := SHOWPROMPT(
             p_profile_name => p_profile_name,
             p_user_text => p_user_text,
+            p_embedding_conf => p_embedding_conf,
             p_ref_count => p_ref_count
         );
 

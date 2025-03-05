@@ -1,37 +1,50 @@
 create or replace package CUSTOM_SELECT_AI is
 
     procedure CREATE_PROVIDER (
-        p_provider varchar2,
-        p_endpoint varchar2,
-        p_auth varchar2 DEFAULT NULL
+        p_provider          IN VARCHAR2,
+        p_endpoint          IN VARCHAR2,
+        p_auth              IN VARCHAR2
     );
 
     procedure DROP_PROVIDER (
-        p_provider varchar2
+        p_provider          IN VARCHAR2
+    );
+
+    procedure CREATE_EMBEDDING_CONF (
+        p_conf_id           IN VARCHAR2,
+        p_provider          IN VARCHAR2,
+        p_model             IN VARCHAR2,
+        p_endpoint          IN VARCHAR2,
+        p_credential        IN VARCHAR2
+    );
+
+    procedure DROP_EMBEDDING_CONF (
+        p_conf_id          IN VARCHAR2
     );
 
     procedure CREATE_PROFILE (
-        p_profile_name varchar2,
-        p_description varchar2,
-        p_attributes CLOB
+        p_profile_name      IN VARCHAR2,
+        p_description       IN VARCHAR2,
+        p_attributes        CLOB
     );
 
     procedure DROP_PROFILE (
-        p_profile_name varchar2
+        p_profile_name      IN VARCHAR2
     );
 
     function DESC_TABLE(
-        p_schema_name in varchar2,
-        p_table_name in varchar2
+        p_schema_name       IN VARCHAR2,
+        p_table_name        IN VARCHAR2
     ) return varchar2;
 
     function VALIDSQL (
-        p_sql in varchar2
+        p_sql               IN VARCHAR2
     ) return varchar2;
 
     function SHOWPROMPT(
         p_user_text         IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
+        p_embedding_conf    IN VARCHAR2 default 'DEFAULT',
         p_ref_count         IN NUMBER default 5
     ) return varchar2;
 
@@ -60,6 +73,7 @@ create or replace package CUSTOM_SELECT_AI is
     function SHOWSQL(
         p_user_text         IN VARCHAR2,
         p_profile_name      IN VARCHAR2,
+        p_embedding_conf    IN VARCHAR2 default 'DEFAULT',
         p_max_rows          IN NUMBER default 20,
         p_ref_count         IN NUMBER default 5,
         p_user              IN VARCHAR2 default null,
