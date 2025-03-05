@@ -530,5 +530,30 @@ create or replace package body CUSTOM_SELECT_AI is
         return l_sql;
     end SHOWSQL;
 
+    function EMBEDDING(
+        p_text              IN VARCHAR2,
+        p_embedding_conf    IN VARCHAR2 default 'DEFAULT'
+    ) return varchar2
+    is
+        l_embedding_provider varchar2(100);
+        l_embedding_endpoint varchar2(1000);
+        l_embedding_model varchar2(256);
+        l_embedding_credential varchar2(100);
+    begin
+        select provider, endpoint, model, credential into l_embedding_provider, l_embedding_endpoint, l_embedding_model, l_embedding_credential
+        from CUSTOM_SELECT_AI_EMBEDDING_CONF
+        where conf_id = p_embedding_conf;
+
+        return FROM_VECTOR(dbms_vector.utl_to_embedding(
+            p_text,
+            json('{
+                "provider": "' || l_embedding_provider || '",
+                "credential_name": "' || l_embedding_credential || '",
+                "url": "' || l_embedding_endpoint || '",
+                "model": "' || l_embedding_model || '"
+            }')
+        ));
+    end EMBEDDING;    
+
 end CUSTOM_SELECT_AI;
 /

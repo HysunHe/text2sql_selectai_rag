@@ -84,5 +84,10 @@ create or replace package CUSTOM_SELECT_AI is
         p_no_proxy_domains  IN VARCHAR2 default null
     ) return varchar2;
 
+    function EMBEDDING(
+        p_text              IN VARCHAR2,
+        p_embedding_conf    IN VARCHAR2 default 'DEFAULT'
+    ) return varchar2;
+
 end CUSTOM_SELECT_AI;
 /
