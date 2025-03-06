@@ -22,8 +22,6 @@ DB_POOL_MAX = int(os.environ.get("DB_POOL_MAX", 2))
 
 # Vector search parameters
 # Distance matrics list: COSINE, EUCLIDEAN, DOT, MANHATTAN, HAMMING
-DISTANCE_MATRIC = os.environ.get("DISTANCE_MATRIC", "COSINE")
-NEAREST_TOPN = int(os.environ.get("NEAREST_TOPN", 10))
 DISTANCE_THRESHOLD = float(os.environ.get("DISTANCE_THRESHOLD", 0.25))
 DISTANCE_THRESHOLD_ACCURATE = float(os.environ.get("DISTANCE_THRESHOLD_ACCURATE", 0.05))
 
@@ -38,16 +36,9 @@ SERVER_HOST = os.environ.get("SERVER_HOST", "0.0.0.0")
 SERVER_LISTEN_PORT = int(os.environ.get("SERVER_LISTEN_PORT", 5000))
 CONTEXT_ROOT = os.environ.get("CONTEXT_ROOT", "")
 
-# OCI Generative AI Service
-OCI_GENAI_COMPARTMENT = os.environ.get("OCI_GENAI_COMPARTMENT")
-OCI_CONFIG_FILE = os.environ.get("OCI_CONFIG_FILE", "~/.oci/config")
-OCI_CONFIG_PROFILE = os.environ.get("OCI_CONFIG_PROFILE", "DEFAULT")
-OCI_SERVICE_ENDPOINT = os.environ.get("OCI_SERVICE_ENDPOINT")
-OCI_GENAI_MODEL = os.environ.get("OCI_GENAI_MODEL")
+# Embedding model
+EMBEDDING_CONFIG = os.environ.get("EMBEDDING_CONFIG", "DEFAULT")
 
 # Application debug level
 DEBUG_LEVEL = int(os.environ.get("DEBUG_LEVEL", 10))
 LOG_FILE_PATH = os.environ.get("LOG_FILE_PATH")
-
-# Embedding model
-EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL")

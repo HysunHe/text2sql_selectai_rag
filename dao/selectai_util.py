@@ -14,24 +14,49 @@ import re
 import logging
 from dao.db_pool import selectai_pool
 from conf import app_config
-from oracledb import Cursor
 from myutils import util_funcs
+from oracledb import Cursor
 from oracledb import DatabaseError
+from ast import literal_eval
 from typing import List, Optional
 
 _logger = logging.getLogger(__name__)
 
 
+def embedding_invoke(
+    docs: List[str], config_name: Optional[str] = app_config.EMBEDDING_CONFIG
+) -> List[List[float]]:
+    _logger.debug(f"Running embedding.")
+    rows = []
+    with selectai_pool.acquire() as connection:
+        for text in docs:
+            with connection.cursor() as cursor:
+                sql = f"""
+                    SELECT CUSTOM_SELECT_AI.EMBEDDING(
+                        p_text              => '{text}',
+                        p_embedding_conf    => '{config_name}'
+                    ) FROM dual
+                """
+                for result in cursor.execute(sql):
+                    rows.append(literal_eval(result[0]))
+    return rows
+
+
 def showsql(
-    user: str, sentence: str, llm_profile: str, request_id: Optional[str] = None
+    user: str,
+    sentence: str,
+    llm_profile: str,
+    request_id: Optional[str] = None,
+    config_name: Optional[str] = app_config.EMBEDDING_CONFIG,
 ) -> Optional[str]:
     _logger.debug(f"Running showsql ...[{llm_profile}]")
     sql = f"""
         SELECT CUSTOM_SELECT_AI.SHOWSQL(
-            p_user          => '{user}',
-            p_profile_name  => '{llm_profile}',
-            p_user_text     => '{util_funcs.escape(sentence)}',
-            p_request_id    => '{request_id}'
+            p_user              => '{user}',
+            p_profile_name      => '{llm_profile}',
+            p_user_text         => '{util_funcs.escape(sentence)}',
+            p_embedding_conf    => '{config_name}',
+            p_request_id        => '{request_id}'
         ) FROM dual
     """
 
@@ -90,8 +115,15 @@ def runsql(
     sentence: str,
     llm_profile: str,
     request_id: Optional[str] = None,
+    config_name: Optional[str] = app_config.EMBEDDING_CONFIG,
 ) -> tuple[Optional[List[any]], Optional[List[any]], Optional[List[str]]]:
-    sql = showsql(user, sentence, llm_profile, request_id)
+    sql = showsql(
+        user=user,
+        sentence=sentence,
+        llm_profile=llm_profile,
+        request_id=request_id,
+        config_name=config_name,
+    )
     _logger.debug(sql)
     if sql is None:
         return (None, None, None)
@@ -154,7 +186,13 @@ def free_chat(
 def set_vpd_appuser(client: Cursor, user: str) -> None:
     if app_config.ENABLE_VPD:
         login = re.sub(r"_\d{14,}", "", user)
-        client.callproc(
-            "SET_APP_USER_CTX_PROC",
-            [login],
-        )
+        try:
+            client.callproc(
+                "SET_APP_USER_CTX_PROC",
+                [login],
+            )
+        except Exception as e:
+            _logger.error(str(e))
+            _logger.error(
+                "VPD is enabled, but failed to set the user info to the database session context. Check if you defined the procedure SET_APP_USER_CTX_PROC."
+            )

@@ -248,7 +248,10 @@ def search_data(user: str, ask: str):
 
     request_id = uuid.uuid4().hex
     (query_json, query_rows, col_headers) = selectai_util.runsql(
-        user, selectai_prompt_sentence, app_config.SELECTAI_PROFILE, request_id
+        user=user,
+        sentence=selectai_prompt_sentence,
+        llm_profile=app_config.SELECTAI_PROFILE,
+        request_id=request_id,
     )
 
     search_result_object = (

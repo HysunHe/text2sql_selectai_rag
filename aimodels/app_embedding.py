@@ -1,30 +1,26 @@
 """ 
 Description: 
- - AiReport project.
+ - AiReport project. This is a demo POC project, it is not intented
+   for production. The quality of the code is not guaranteed. 
+   
+   If you refrence the code in this project, it means that you understand
+   the risk and you are responsible for any issues caused by the code.
 
 History:
- - 2024/07/11 by Hysun (hysun.he@oracle.com): Created
+ - 2025/01/20 by Hysun (hysun.he@oracle.com): Initial implementation.
 """
 
-# from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-# from conf import app_config
+from dao import selectai_util
 from langchain_core.embeddings import Embeddings
-from aimodels import oci_genai
 from typing import List
 
 
-# embedding_model = HuggingFaceEmbeddings(
-#     model_name=app_config.EMBEDDING_MODEL,
-#     model_kwargs={"device": "cpu"},
-# )
-
-
-class OciEmbeddings(Embeddings):
+class CustomSelectAiEmbeddings(Embeddings):
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
-        return oci_genai.embedding_invoke(docs=texts)
+        return selectai_util.embedding_invoke(docs=texts)
 
     def embed_query(self, text: str) -> List[float]:
         return self.embed_documents([text])[0]
 
 
-embedding_model = OciEmbeddings()
+embedding_model = CustomSelectAiEmbeddings()

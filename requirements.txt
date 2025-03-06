@@ -4,7 +4,7 @@ oracledb
 fastapi
 uvicorn
 python-dotenv
-oci
+langchain-openai
 langchain_community
 markdown
 rich
