@@ -113,6 +113,9 @@ BEGIN
 	);
 END;
 /
+
+注意：上面的 p_credential，需要使用 dbms_vector.create_credential 创建。具体请参阅 Oracle 的官方文档【https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/dbms_vector1.html】。
+
 ```
 
 
