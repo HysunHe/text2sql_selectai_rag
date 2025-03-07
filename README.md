@@ -161,7 +161,7 @@ select CUSTOM_SELECT_AI.SHOWSQL(
 
 ## 配置Demo应用
 
-Demo应用是AI Report的一个参考实现，其使用了上述 SHOWSQL 接口及 CHAT 接口等，前端 UI 采用 Oracle 低代码平台 APEX 实现，后端服务采用 Python 实现。Demo应用不复杂，因此作详细描述，读者可自己参阅源代码。
+Demo应用是AI Report的一个参考实现，其使用了上述 SHOWSQL 接口及 CHAT 接口等，前端 UI 采用 Oracle 低代码平台 APEX 实现，后端服务采用 Python 实现。Demo应用本身不复杂，因此不作详细描述，读者可自己参阅源代码。
 
 ### Python包依赖
 
