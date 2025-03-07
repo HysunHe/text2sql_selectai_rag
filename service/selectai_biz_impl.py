@@ -1,8 +1,8 @@
-""" 
-Description: 
+"""
+Description:
  - AiReport project. This is a demo POC project, it is not intented
-   for production. The quality of the code is not guaranteed. 
-   
+   for production. The quality of the code is not guaranteed.
+
    If you refrence the code in this project, it means that you understand
    the risk and you are responsible for any issues caused by the code.
 
@@ -180,7 +180,7 @@ def search_data(user: str, ask: str):
     elif intent == "批评语":
         msg = f"""非常抱歉，没能解决您的问题。作为一个智能助手，我会持续学习，尽快达到您的要求。在此之前，您可以问我如下这些主题的数据查询：
             {dao_sql.list_selectai_intents()}"""
-        _logger.debug(f"### Your query is not in the supervised question list: {ask}")
+        return [{"content": msg, "source": "system", "score": 1}]
 
     selectai_prompt, params = dao_sql.get_selectai_prompt_by_intent(intent)
     (chart, data_cols, name_cols, ext_rpt_url) = dao_sql.get_chart_by_intent(intent)
