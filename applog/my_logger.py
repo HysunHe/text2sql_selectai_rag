@@ -1,9 +1,13 @@
 """ 
 Description: 
- - AiReport project.
+ - AiReport project. This is a demo POC project, it is not intented
+   for production. The quality of the code is not guaranteed. 
+   
+   If you refrence the code in this project, it means that you understand
+   the risk and you are responsible for any issues caused by the code.
 
 History:
- - 2024/07/11 by Hysun (hysun.he@oracle.com): Created
+ - 2025/01/20 by Hysun (hysun.he@oracle.com): Initial implementation.
 """
 
 import logging
