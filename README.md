@@ -114,8 +114,23 @@ BEGIN
 END;
 /
 
+```
+
 注意：上面的 p_credential，需要使用 dbms_vector.create_credential 创建。具体请参阅 Oracle 的官方文档【https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/dbms_vector1.html】。
 
+以上是用 Oracle OCI 的 Embedding 模型，也可以是其它的模型，比如用 千问(QWen) Embedding:
+
+```sql
+BEGIN
+  CUSTOM_SELECT_AI.CREATE_EMBEDDING_CONF(
+        p_conf_id     =>    'qwen_embedding',
+		p_provider    =>    'OpenAI',
+        p_model       =>    'text-embedding-v3',
+		p_endpoint    =>    'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings',
+		p_credential  =>    'HYSUN_ALIYUN_CRED'
+	);
+END;
+/
 ```
 
 
