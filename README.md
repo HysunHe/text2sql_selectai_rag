@@ -118,7 +118,7 @@ END;
 
 注意：上面的 p_credential，需要使用 dbms_vector.create_credential 创建。具体请参阅 Oracle 的官方文档【https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/dbms_vector1.html】。
 
-以上是用 Oracle OCI 的 Embedding 模型，也可以是其它的模型，比如用 千问(QWen) Embedding:
+以上是用 Oracle OCI 的 Embedding 模型，也可以是其它的模型，比如用 千问(QWen) Embedding 或者是 自己部署的 Embedding 模型。如下是使用 千问(QWen) Embedding 的例子：
 
 ```sql
 BEGIN
