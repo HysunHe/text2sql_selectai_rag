@@ -106,10 +106,6 @@ create or replace package body CUSTOM_SELECT_AI is
 
         DBMS_OUTPUT.PUT_LINE('PROFILE CREATED SUCCESSFULLY');
 
-    exception
-        when others then
-            rollback;
-            DBMS_OUTPUT.PUT_LINE('ERROR CREATING PROFILE: ' || SQLERRM);
     end CREATE_PROFILE;
 
 
@@ -119,13 +115,6 @@ create or replace package body CUSTOM_SELECT_AI is
     begin
         delete from CUSTOM_SELECT_AI_PROFILES where PROFILE_NAME = p_profile_name;
         commit;
-        DBMS_OUTPUT.PUT_LINE('PROFILE DROPPED SUCCESSFULLY');
-    exception
-        when NO_DATA_FOUND then
-            DBMS_OUTPUT.PUT_LINE('ERROR: PROFILE NOT FOUND');
-        when others then
-            rollback;
-            DBMS_OUTPUT.PUT_LINE('ERROR DROPPING PROFILE: ' || SQLERRM);
     end DROP_PROFILE;
 
 
