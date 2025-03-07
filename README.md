@@ -218,9 +218,6 @@ END;
 /
 ```
 
-### Memo (Demo Application URL)
-
-https://wdsshsl4d6foyhp-cntech.adb.ap-chuncheon-1.oraclecloudapps.com/ords/r/hys/chatbi185/home
 
 ### 演示场景 (Demo Script)
 
