@@ -1,4 +1,10 @@
-# 介绍
+## 免责声明
+这是一个基于 Oracle 23ai 数据库 与 第三方或自部署大语言模型做的一个Demo，不是一个开箱即用的成品，此Demo属于个人作品，与Oracle公司无关。作者及Oracle公司不负责Demo代码的质量保障。如果使用此Demo或其中一部分造成任何损失，后果自负。
+
+下载此Demo应用代表您接受以上免责声明。
+
+
+## 介绍
 
 AiReport Project。此项目主要使用自己部署的大语言模型、Oracle数据库（包括向量、JSON、关系）实现文生SQL(text2sql)，以及采用 RAG 的方式来解决 SQL 生成的正确率问题，通过RAG来达到持续训练持续提升准确率的效果。Text2SQL 及 RAG 引擎部分采用 PLSQL 实现，中间逻辑控制部分采用 Python 实现，前端页面采用 Oracle APEX 低代码实现。
 
