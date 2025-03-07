@@ -2,21 +2,20 @@
 
 AiReport Project。此项目主要使用自己部署的大语言模型、Oracle数据库（包括向量、JSON、关系）实现文生SQL(text2sql)，以及采用 RAG 的方式来解决 SQL 生成的正确率问题，通过RAG来达到持续训练持续提升准确率的效果。Text2SQL 及 RAG 引擎部分采用 PLSQL 实现，中间逻辑控制部分采用 Python 实现，前端页面采用 Oracle APEX 低代码实现。
 
-## 界面
-### RAG 知识库管理界面 (Oracle APEX 实现)
-RAG知识库维护界面的内容来自于系统自动记录的处理日志，通过RAG知识库维护界面，管理员可以将有代表性的问题以及系统生成的SQL语句（可修改）加入到知识库（向量库）中，以达到持续训练RAG的目标。
+RAG知识库采用持续收集、持续学习的思想，让 Text2SQL 越用越准确。
 
-![alt text](image_rag_store.png)
 
-### 用户聊天界面 (Oracle APEX 实现)
+## 架构
+![alt text](image_arch.png)
 
-![alt text](image_chat.png)
 
 ## Python版本
 
 运行该程序需要 Python 3.12。例如，可以使用 conda 或 poetry 创建一个 python 虚拟环境：
 
+```shell
 conda create -n aireport python=3.12
+```
 
 ## 数据库配置
 ### 创建数据库对象
@@ -26,6 +25,7 @@ conda create -n aireport python=3.12
 3. 执行 CUSTOM_SELECT_AI.pkb.sql
 
 执行完以上三步，就代表安装完成，完成如下的配置后，就可以直接使用了。
+
 
 ## LLM 配置
 ### 配置大语言模型提供商
@@ -149,33 +149,21 @@ pip install -r requirements.txt
 
 start.sh: 启动或重启。如果程序已经在运行，那么运行start.sh时将先杀掉正在运行的进程，再启动新的进程。
 
-### GUI
 
-https://wdsshsl4d6foyhp-cntech.adb.ap-chuncheon-1.oraclecloudapps.com/ords/r/hys/chatbi185/home (demo/Demo123#)
+## UI界面
+### RAG 知识库管理界面 (Oracle APEX 实现)
+RAG知识库维护界面的内容来自于系统自动记录的处理日志，通过RAG知识库维护界面，管理员可以将有代表性的问题以及系统生成的SQL语句（可修改）加入到知识库（向量库）中，以达到持续训练RAG的目标。
 
+![alt text](image_rag_store.png)
 
-## 演示/测试
+### 用户聊天界面 (Oracle APEX 实现)
 
-利用样例数据，列出两个演示/测试场景：
-
-### 场景一，查询不良排名数据：
-对话流程：
-1. 输入 “显示不良排名”
-2. 继续输入 “只显示company1公司的”
-3. 继续输入 “只显示product1的”
-3. 继续输入 “只显示product2的”
+![alt text](image_chat.png)
 
 
-### 场景二，查询YIELD小等级占比数据：
-对话流程：
-1. 输入 “查询company1公司生产的product1产品各YIELD小等级占比”
-2. 请提供您需要查询的工厂名称？===> 输入“factoryname1”
-3. 继续输入 “company2公司生产的product2呢”
-4. 完成对话。
+## 附录 (Appendix)
 
-
-## 附
-配置使用云厂端API服务，供参考
+### 配置使用云厂端API服务，供参考
 
 ```sql
 ----- Create service provider
@@ -204,3 +192,26 @@ BEGIN
 END;
 /
 ```
+
+### Memo (Demo Application URL)
+
+https://wdsshsl4d6foyhp-cntech.adb.ap-chuncheon-1.oraclecloudapps.com/ords/r/hys/chatbi185/home
+
+### 演示场景 (Demo Script)
+
+利用样例数据，列出两个演示/测试场景：
+
+### 场景一，查询不良排名数据：
+对话流程：
+1. 输入 “显示不良排名”
+2. 继续输入 “只显示company1公司的”
+3. 继续输入 “只显示product1的”
+3. 继续输入 “只显示product2的”
+
+
+### 场景二，查询YIELD小等级占比数据：
+对话流程：
+1. 输入 “查询company1公司生产的product1产品各YIELD小等级占比”
+2. 请提供您需要查询的工厂名称？===> 输入“factoryname1”
+3. 继续输入 “company2公司生产的product2呢”
+4. 完成对话。
