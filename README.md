@@ -159,7 +159,7 @@ select CUSTOM_SELECT_AI.SHOWSQL(
 );
 ```
 
-## 配置应用
+## 配置Demo应用
 
 ### Python包依赖
 
@@ -169,12 +169,15 @@ pip install -r requirements.txt
 
 服务启动时，会从文件 app.env 中读取环境变量信息。
 
-### 启动程序
+### Demo应用DDL建表
+TODO
+
+### 启动Demo应用服务
 
 start.sh: 启动或重启。如果程序已经在运行，那么运行start.sh时将先杀掉正在运行的进程，再启动新的进程。
 
 
-## UI界面
+## Demo应用UI界面
 ### RAG 知识库管理界面 (Oracle APEX 实现)
 系统自动记录用户每次数据查询时生成的SQL语句，通过将正确的SQL语句持续不断的加入到知识库中，达到持续训练的目的，因此，系统会越用越准确。
 
