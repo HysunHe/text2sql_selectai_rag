@@ -149,6 +149,14 @@ select CUSTOM_SELECT_AI.CHAT(
 );
 ```
 
+### EMBEDDING接口 - 直接与 LLM 聊天
+```sql
+select CUSTOM_SELECT_AI.EMBEDDING(
+    p_text => 'hello',
+    p_embedding_conf => 'DEFAULT'
+);
+```
+
 ### SHOWSQL接口 - 自然语言生成SQL
 此方法将自然语言生成对应的SQL语句
 ```sql
