@@ -48,6 +48,7 @@ def showsql(
     llm_profile: str,
     request_id: Optional[str] = None,
     embedding_conf: Optional[str] = app_config.EMBEDDING_CONFIG,
+    max_rows: Optional[int] = app_config.MAX_ROWS,
 ) -> Optional[str]:
     _logger.debug(f"Running showsql ...[{llm_profile}]")
     sql = f"""
@@ -56,7 +57,8 @@ def showsql(
             p_profile_name      => '{llm_profile}',
             p_user_text         => '{util_funcs.escape(sentence)}',
             p_embedding_conf    => '{embedding_conf}',
-            p_request_id        => '{request_id}'
+            p_request_id        => '{request_id}',
+            p_max_rows          => '{max_rows}'
         ) FROM dual
     """
 
@@ -124,7 +126,7 @@ def runsql(
         llm_profile=llm_profile,
         request_id=request_id,
         embedding_conf=embedding_conf,
-        p_max_rows=max_rows,
+        max_rows=max_rows,
     )
     _logger.debug(sql)
     if sql is None:
