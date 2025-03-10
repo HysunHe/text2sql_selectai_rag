@@ -144,15 +144,16 @@ END;
 ### CHAT接口 - 直接与 LLM 聊天
 ```sql
 select CUSTOM_SELECT_AI.CHAT(
-    p_profile_name => 'HKE_DEMO',
-    p_user_text => 'hello'
+    p_profile_name  => 'HKE_DEMO',
+    p_user_text     => '你好',
+    p_system_text   => '你是一个积极的、充满正能量的人工智能助手。'
 );
 ```
 
 ### EMBEDDING接口 - 文本转向量
 ```sql
 select CUSTOM_SELECT_AI.EMBEDDING(
-    p_text => 'hello',
+    p_text => '将文本转成向量',
     p_embedding_conf => 'DEFAULT'
 );
 ```
