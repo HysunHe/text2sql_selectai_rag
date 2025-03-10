@@ -149,7 +149,7 @@ select CUSTOM_SELECT_AI.CHAT(
 );
 ```
 
-### EMBEDDING接口 - 直接与 LLM 聊天
+### EMBEDDING接口 - 文本转向量
 ```sql
 select CUSTOM_SELECT_AI.EMBEDDING(
     p_text => 'hello',
