@@ -27,6 +27,10 @@ DISTANCE_THRESHOLD_ACCURATE = float(os.environ.get("DISTANCE_THRESHOLD_ACCURATE"
 
 # SelectAI parameters
 SELECTAI_PROFILE = os.environ.get("SELECTAI_PROFILE")
+MAX_ROWS = int(os.environ.get("MAX_ROWS", 20))
+
+# Embedding model
+EMBEDDING_CONFIG = os.environ.get("EMBEDDING_CONFIG", "DEFAULT")
 
 # Data security
 ENABLE_VPD = bool(os.environ.get("ENABLE_VPD", "FALSE").upper() == "TRUE")
@@ -35,9 +39,6 @@ ENABLE_VPD = bool(os.environ.get("ENABLE_VPD", "FALSE").upper() == "TRUE")
 SERVER_HOST = os.environ.get("SERVER_HOST", "0.0.0.0")
 SERVER_LISTEN_PORT = int(os.environ.get("SERVER_LISTEN_PORT", 5000))
 CONTEXT_ROOT = os.environ.get("CONTEXT_ROOT", "")
-
-# Embedding model
-EMBEDDING_CONFIG = os.environ.get("EMBEDDING_CONFIG", "DEFAULT")
 
 # Application debug level
 DEBUG_LEVEL = int(os.environ.get("DEBUG_LEVEL", 10))

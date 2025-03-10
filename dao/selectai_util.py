@@ -116,13 +116,15 @@ def runsql(
     llm_profile: str,
     request_id: Optional[str] = None,
     embedding_conf: Optional[str] = app_config.EMBEDDING_CONFIG,
+    max_rows: Optional[int] = app_config.MAX_ROWS,
 ) -> tuple[Optional[List[any]], Optional[List[any]], Optional[List[str]]]:
     sql = showsql(
         user=user,
         sentence=sentence,
         llm_profile=llm_profile,
         request_id=request_id,
-        config_name=embedding_conf,
+        embedding_conf=embedding_conf,
+        p_max_rows=max_rows,
     )
     _logger.debug(sql)
     if sql is None:
