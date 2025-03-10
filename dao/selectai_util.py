@@ -1,8 +1,8 @@
-""" 
-Description: 
+"""
+Description:
  - AiReport project. This is a demo POC project, it is not intented
-   for production. The quality of the code is not guaranteed. 
-   
+   for production. The quality of the code is not guaranteed.
+
    If you refrence the code in this project, it means that you understand
    the risk and you are responsible for any issues caused by the code.
 
@@ -24,7 +24,7 @@ _logger = logging.getLogger(__name__)
 
 
 def embedding_invoke(
-    docs: List[str], config_name: Optional[str] = app_config.EMBEDDING_CONFIG
+    docs: List[str], embedding_conf: Optional[str] = app_config.EMBEDDING_CONFIG
 ) -> List[List[float]]:
     _logger.debug(f"Running embedding.")
     rows = []
@@ -34,7 +34,7 @@ def embedding_invoke(
                 sql = f"""
                     SELECT CUSTOM_SELECT_AI.EMBEDDING(
                         p_text              => '{text}',
-                        p_embedding_conf    => '{config_name}'
+                        p_embedding_conf    => '{embedding_conf}'
                     ) FROM dual
                 """
                 for result in cursor.execute(sql):
@@ -47,7 +47,7 @@ def showsql(
     sentence: str,
     llm_profile: str,
     request_id: Optional[str] = None,
-    config_name: Optional[str] = app_config.EMBEDDING_CONFIG,
+    embedding_conf: Optional[str] = app_config.EMBEDDING_CONFIG,
 ) -> Optional[str]:
     _logger.debug(f"Running showsql ...[{llm_profile}]")
     sql = f"""
@@ -55,7 +55,7 @@ def showsql(
             p_user              => '{user}',
             p_profile_name      => '{llm_profile}',
             p_user_text         => '{util_funcs.escape(sentence)}',
-            p_embedding_conf    => '{config_name}',
+            p_embedding_conf    => '{embedding_conf}',
             p_request_id        => '{request_id}'
         ) FROM dual
     """
@@ -115,14 +115,14 @@ def runsql(
     sentence: str,
     llm_profile: str,
     request_id: Optional[str] = None,
-    config_name: Optional[str] = app_config.EMBEDDING_CONFIG,
+    embedding_conf: Optional[str] = app_config.EMBEDDING_CONFIG,
 ) -> tuple[Optional[List[any]], Optional[List[any]], Optional[List[str]]]:
     sql = showsql(
         user=user,
         sentence=sentence,
         llm_profile=llm_profile,
         request_id=request_id,
-        config_name=config_name,
+        config_name=embedding_conf,
     )
     _logger.debug(sql)
     if sql is None:
